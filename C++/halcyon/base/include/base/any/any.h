@@ -66,7 +66,7 @@ public:
     using decay_t = typename std::decay<U>::type;
 
 public:
-    /*
+    /**
      * @brief   其他类型转换为 Any(排除 Any 类型 std::enable_if)
      */
     template<typename U, typename = typename std::enable_if<!std::is_same<decay_t<U>, Any>::value, U>::type> Any(U&& value)
