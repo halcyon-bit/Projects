@@ -5,6 +5,13 @@
 #include <memory>
 #include <typeindex>
 
+#ifdef USE_CPP11
+#include <base/utility/types.h>
+#else
+#include <type_traits>  // std::decay_t
+using std::decay_t;
+#endif
+
 BASE_BEGIN_NAMESPACE
 
 /*
@@ -60,10 +67,6 @@ public:
         }
         return *this;
     }
-
-public:
-    template<typename U>
-    using decay_t = typename std::decay<U>::type;
 
 public:
     /**
