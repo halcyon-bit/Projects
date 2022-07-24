@@ -1,0 +1,55 @@
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# vs
+.vs
+tmp
+win64_v141_Debug
+win64_v142_Debug
+win64_v143_Debug
+win64_v141_Release
+win64_v142_Release
+win64_v143_Release
+
+# linux
+linux_debug
+linux_release
+build
+
+# other
+C#
+MFC
+Python
+Golang
+Rust
+experiment
