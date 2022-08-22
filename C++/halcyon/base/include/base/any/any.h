@@ -151,8 +151,10 @@ private:
     }
 
 private:
-    BasePtr ptr_;  // 值
-    std::type_index type_;  // 类型
+    //! 值
+    BasePtr ptr_;
+    //! 类型
+    std::type_index type_;
 };
 
 BASE_END_NAMESPACE
