@@ -9,19 +9,18 @@
 #include <base/utility/types.h>
 #else
 #include <type_traits>  // std::decay_t
-using std::decay_t;
 #endif
 
 BASE_BEGIN_NAMESPACE
 
-/*
+/**
  * @brief   一个特殊的只能容纳一个元素的容器，它可以擦除类型，可以赋给它任何
  *      类型的值，不过在使用的时候需要根据实际类型将 any 对象转换为实际的对象。
  *
  *      通过继承去擦除类型，基类是不含模板参数的，派生类中才有模板参数，这个模板
  *  参数类型正是赋值的类型。
  *
- * @ps      C++17 中已有 any 类型
+ * @ps      C++17 中已有 std::any 类型
  */
 class Any
 {
@@ -72,9 +71,9 @@ public:
     /**
      * @brief   其他类型转换为 Any(排除 Any 类型 std::enable_if)
      */
-    template<typename U, typename = typename std::enable_if<!std::is_same<decay_t<U>, Any>::value, U>::type> Any(U&& value)
-        : ptr_(new Derived<decay_t<U>>(std::forward<U>(value)))
-        , type_(std::type_index(typeid(decay_t<U>)))
+    template<typename U, typename = typename std::enable_if<!std::is_same<std::decay_t<U>, Any>::value, U>::type> Any(U&& value)
+        : ptr_(new Derived<std::decay_t<U>>(std::forward<U>(value)))
+        , type_(std::type_index(typeid(std::decay_t<U>)))
     {}
 
 public:

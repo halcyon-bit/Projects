@@ -4,9 +4,7 @@
 
 BASE_BEGIN_NAMESPACE
 
-/**
- * @brief   对象语义的基类
- */
+/// 对象语义的基类
 class noncopyable
 {
 public:
