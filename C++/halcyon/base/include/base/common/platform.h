@@ -59,3 +59,9 @@
 #error "should use c++11 implementation"
 #endif
 #endif
+
+#ifdef USE_CPP11
+#define CONSTEXPR
+#else
+#define CONSTEXPR constexpr
+#endif

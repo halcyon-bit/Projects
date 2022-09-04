@@ -130,7 +130,7 @@ public:  /// 访问
     }
 
 public:  /// 修改
-    constexpr void remove_prefix(size_type n)
+    CONSTEXPR void remove_prefix(size_type n)
     {
         if (n > size_) {
             n = size_;
@@ -139,7 +139,7 @@ public:  /// 修改
         size_ -= n;
     }
 
-    constexpr void remove_suffix(size_type n)
+    CONSTEXPR void remove_suffix(size_type n)
     {
         if (n > size_) {
             n = size_;
@@ -147,7 +147,7 @@ public:  /// 修改
         size_ -= n;
     }
 
-    constexpr void swap(basic_string_view& s) noexcept
+    CONSTEXPR void swap(basic_string_view& s) noexcept
     {
         std::swap(str_, s.str_);
         std::swap(size_, s.size_);
@@ -177,7 +177,7 @@ public:  /// 修改
         return len;
     }
 
-    constexpr basic_string_view substr(size_type pos, size_type n = npos) const
+    CONSTEXPR basic_string_view substr(size_type pos, size_type n = npos) const
     {
         if (pos > size()) {
             throw std::out_of_range("string_view::substr");
@@ -186,7 +186,7 @@ public:  /// 修改
     }
 
 public:  /// 比较
-    constexpr int compare(basic_string_view s) const noexcept
+    CONSTEXPR int compare(basic_string_view s) const noexcept
     {
         const int cmp = traits_type::compare(str_, s.str_, std::min(size_, s.size_));
         return cmp != 0 ? cmp : (size_ == s.size_ ? 0 : size_ < s.size_ ? -1 : 1);
@@ -234,7 +234,7 @@ public:
     }
 
 public:  /// 查找 find
-    constexpr size_type find(basic_string_view s, size_type pos = 0) const noexcept
+    CONSTEXPR size_type find(basic_string_view s, size_type pos = 0) const noexcept
     {
         if (pos > size()) {
             return npos;
@@ -259,7 +259,7 @@ public:  /// 查找 find
         }
         return npos;
     }
-    constexpr size_type find(value_type c, size_type pos = 0) const noexcept
+    CONSTEXPR size_type find(value_type c, size_type pos = 0) const noexcept
     {
         if (pos > size()) {
             return npos;
@@ -281,7 +281,7 @@ public:  /// 查找 find
     }
 
 public:  /// 查找 rfind
-    constexpr size_type rfind(basic_string_view s, size_type pos = npos) const noexcept
+    CONSTEXPR size_type rfind(basic_string_view s, size_type pos = npos) const noexcept
     {
         if (size_ < s.size()) {
             return npos;
@@ -314,7 +314,7 @@ public:  /// 查找 rfind
     }
 
 public:  /// 查找 find_first_of
-    constexpr size_type find_first_of(basic_string_view s, size_type pos = 0) const noexcept
+    CONSTEXPR size_type find_first_of(basic_string_view s, size_type pos = 0) const noexcept
     {
         if (pos > size() || s.empty()) {
             return npos;
@@ -336,7 +336,7 @@ public:  /// 查找 find_first_of
     }
 
 public:  /// 查找 find_last_of
-    constexpr size_type find_last_of(basic_string_view s, size_type pos = npos) const noexcept
+    CONSTEXPR size_type find_last_of(basic_string_view s, size_type pos = npos) const noexcept
     {
         if (s.empty()) {
             return npos;
@@ -364,7 +364,7 @@ public:  /// 查找 find_last_of
     }
 
 public:  /// 查找 find_first_not_of
-    constexpr size_type find_first_not_of(basic_string_view s, size_type pos = 0) const noexcept
+    CONSTEXPR size_type find_first_not_of(basic_string_view s, size_type pos = 0) const noexcept
     {
         if (pos >= size_) {
             return npos;
@@ -389,7 +389,7 @@ public:  /// 查找 find_first_not_of
     }
 
 public:  /// 查找 find_last_not_of
-    constexpr size_type find_last_not_of(basic_string_view s, size_type pos = npos) const noexcept
+    CONSTEXPR size_type find_last_not_of(basic_string_view s, size_type pos = npos) const noexcept
     {
         if (pos >= size_) {
             pos = size_ - 1;
@@ -439,7 +439,7 @@ private:
 
 /// 比较运算符
 template<typename CharT, typename Traits>
-inline constexpr bool operator==(basic_string_view<CharT, Traits> l, basic_string_view<CharT, Traits> r) noexcept
+inline CONSTEXPR bool operator==(basic_string_view<CharT, Traits> l, basic_string_view<CharT, Traits> r) noexcept
 {
     if (l.size() != r.size()) {
         return false;
@@ -448,7 +448,7 @@ inline constexpr bool operator==(basic_string_view<CharT, Traits> l, basic_strin
 }
 
 template<typename CharT, typename Traits>
-inline constexpr bool operator!=(basic_string_view<CharT, Traits> l, basic_string_view<CharT, Traits> r) noexcept
+inline CONSTEXPR bool operator!=(basic_string_view<CharT, Traits> l, basic_string_view<CharT, Traits> r) noexcept
 {
     if (l.size() != r.size()) {
         return true;
