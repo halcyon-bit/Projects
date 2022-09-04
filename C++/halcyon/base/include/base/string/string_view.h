@@ -33,7 +33,7 @@ public:
     using difference_type = std::ptrdiff_t;
 
 public:
-    static constexpr size_type npos{ size_type(-1) };
+    static constexpr size_type npos;  // { size_type(-1) };
 
 public:  /// 构造函数
     constexpr basic_string_view() noexcept = default;
@@ -435,7 +435,8 @@ private:
     const value_type* str_{ nullptr };
     size_type size_{ 0 };
 };
-
+template<typename CharT, typename Traits>
+constexpr basic_string_view<CharT, Traits>::size_type npos = typename basic_string_view<CharT, Traits>::size_type(-1);
 
 /// 比较运算符
 template<typename CharT, typename Traits>

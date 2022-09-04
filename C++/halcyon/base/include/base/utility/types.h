@@ -163,6 +163,6 @@ BASE_END_NAMESPACE
 namespace std
 {
     template<typename T>
-    using decay_t = ::std::decay<T>::type;
+    using decay_t = typename ::std::decay<T>::type;
 }
 #endif
