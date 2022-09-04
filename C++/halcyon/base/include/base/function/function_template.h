@@ -142,20 +142,6 @@ class FUNCTION_NAME
         emInvalidFunc
     };
 
-    //! 类型
-    int32_t type_;
-
-    //! 函数指针
-    union {
-        MEM_FUNCTION mem_func;
-        GEN_FUNCTION gen_func;
-    }func_;
-
-    //! 类对象
-    X* object_;
-    //! 类对象的shared_ptr
-    std::shared_ptr<X> sptr_;
-
 public:
     /**
      * @brief   默认构造函数
@@ -353,6 +339,21 @@ public:
             throw std::logic_error("invalid function");
         }
     }
+
+private:
+    //! 类型
+    int32_t type_;
+
+    //! 函数指针
+    union {
+        MEM_FUNCTION mem_func;
+        GEN_FUNCTION gen_func;
+    }func_;
+
+    //! 类对象
+    X* object_;
+    //! 类对象的shared_ptr
+    std::shared_ptr<X> sptr_;
 };
 
 #undef FUNCTION_RETURN

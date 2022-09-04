@@ -10,7 +10,6 @@ BASE_BEGIN_NAMESPACE
 
 /**
  * @brief   用于处理只读字符串的轻量对象
- *
  * @ps      C++17 中已有 std::string_view 类型
  */
 template<typename CharT, typename Traits>

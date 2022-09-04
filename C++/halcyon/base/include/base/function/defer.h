@@ -63,7 +63,8 @@ private:
     _DeferredAction() = delete;
 
 private:
-    std::function<void()> func_;  // 需要执行的闭包函数
+    //! 需要执行的闭包函数
+    std::function<void()> func_;
 };
 
 /**

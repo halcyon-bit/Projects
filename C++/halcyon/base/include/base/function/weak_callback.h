@@ -37,8 +37,10 @@ public:
     }
 
 private:
-    std::weak_ptr<C> object_;  // 类对象
-    std::function<void(C*, Args...)> function_;  // 类的成员函数
+    //! 类对象
+    std::weak_ptr<C> object_;
+    //! 类的成员函数
+    std::function<void(C*, Args...)> function_;
 };
 
 /**

@@ -138,16 +138,23 @@ private:
         }
 
     private:
-        size_type cursor_;  // 数量
-        const value_type step_;  // 步长
-        value_type value_;  // 值
+        //! 数量(游标)
+        size_type cursor_;
+        //! 步长
+        const value_type step_;
+        //! 值
+        value_type value_;
     };
 
 private:
-    const value_type begin_;  // 起始值
-    const value_type end_;  // 结束值
-    const value_type step_;  // 步长
-    const size_type max_count_;  // 数量
+    //! 起始值
+    const value_type begin_;
+    //! 结束值
+    const value_type end_;
+    //! 步长
+    const value_type step_;
+    //! 数量
+    const size_type max_count_;
 };
 
 /**
