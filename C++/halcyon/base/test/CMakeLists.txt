@@ -61,47 +61,47 @@ LINK_DIRECTORIES(${BASE_LIB_PATH})
 LINK_DIRECTORIES(${DEPENDS_PATH}/thirdparty/googletest/1.11.0/lib/linux)
 
 # any
-add_executable(ut_any ${SRC_PATH}/ut_any.cc)
+add_executable(ut_any ${SRC_PATH}/ut_any.cpp)
 target_link_libraries(ut_any gtest pthread)
 
 # base64
-add_executable(ut_base64 ${SRC_PATH}/ut_base64.cc)
+add_executable(ut_base64 ${SRC_PATH}/ut_base64.cpp)
 target_link_libraries(ut_base64 gtest halcyon_base pthread)
 
 # count_down_latch
-add_executable(ut_count_down_latch ${SRC_PATH}/ut_count_down_latch.cc)
+add_executable(ut_count_down_latch ${SRC_PATH}/ut_count_down_latch.cpp)
 target_link_libraries(ut_count_down_latch pthread)
 
 # defer
-add_executable(ut_defer ${SRC_PATH}/ut_defer.cc)
+add_executable(ut_defer ${SRC_PATH}/ut_defer.cpp)
 
 # elapsed_timer
-add_executable(ut_elapsed_timer ${SRC_PATH}/ut_elapsed_timer.cc)
+add_executable(ut_elapsed_timer ${SRC_PATH}/ut_elapsed_timer.cpp)
 
 # function
-add_executable(ut_function ${SRC_PATH}/ut_function.cc)
+add_executable(ut_function ${SRC_PATH}/ut_function.cpp)
 target_link_libraries(ut_function gtest pthread)
 
 # md5
-add_executable(ut_md5 ${SRC_PATH}/ut_md5.cc)
+add_executable(ut_md5 ${SRC_PATH}/ut_md5.cpp)
 target_link_libraries(ut_md5 gtest halcyon_base pthread)
 
 # range
-add_executable(ut_range ${SRC_PATH}/ut_range.cc)
+add_executable(ut_range ${SRC_PATH}/ut_range.cpp)
 target_link_libraries(ut_range)
 
 # singleton
-add_executable(ut_singleton ${SRC_PATH}/ut_singleton.cc)
+add_executable(ut_singleton ${SRC_PATH}/ut_singleton.cpp)
 target_link_libraries(ut_singleton pthread)
 
 # string_view
-add_executable(ut_string_view ${SRC_PATH}/ut_string_view.cc)
+add_executable(ut_string_view ${SRC_PATH}/ut_string_view.cpp)
 target_link_libraries(ut_string_view gtest pthread)
 
 # version
-add_executable(ut_version ${SRC_PATH}/ut_version.cc)
+add_executable(ut_version ${SRC_PATH}/ut_version.cpp)
 target_link_libraries(ut_version halcyon_base)
 
 # weak_callback
-add_executable(ut_weak_callback ${SRC_PATH}/ut_weak_callback.cc)
+add_executable(ut_weak_callback ${SRC_PATH}/ut_weak_callback.cpp)
 target_link_libraries(ut_weak_callback gtest pthread)
