@@ -98,6 +98,10 @@ target_link_libraries(ut_singleton pthread)
 add_executable(ut_string_view ${SRC_PATH}/ut_string_view.cc)
 target_link_libraries(ut_string_view gtest pthread)
 
+# version
+add_executable(ut_version ${SRC_PATH}/ut_version.cc)
+target_link_libraries(ut_version halcyon_base)
+
 # weak_callback
 add_executable(ut_weak_callback ${SRC_PATH}/ut_weak_callback.cc)
 target_link_libraries(ut_weak_callback gtest pthread)
