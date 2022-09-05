@@ -190,6 +190,11 @@ public:  /// 修改
     }
 
 public:  /// 比较
+    /**
+     * @brief   若 this 小于 s 则为负值.
+     *          若 this 等于 s 则为 ​0​.
+     *          若 this 大于 s 则为正值.
+     */
     CONSTEXPR int compare(basic_string_view s) const noexcept
     {
         const int cmp = traits_type::compare(str_, s.str_, std::min(size_, s.size_));
