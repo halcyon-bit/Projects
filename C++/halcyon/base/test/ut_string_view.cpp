@@ -148,37 +148,37 @@ TEST(StringViewTest, compare)
     EXPECT_EQ(sv1.compare(string_view()), 1);
     EXPECT_EQ(sv1.compare(sv2), 0);
     EXPECT_EQ(sv1.compare(sv3), 1);
-    EXPECT_EQ(sv1.compare(sv4), -1);
+    EXPECT_LT(sv1.compare(sv4), 0);
 
     // compare(size_type, size_type, basic_string_view)
     EXPECT_EQ(sv1.compare(0, 3, sv3), 0);
-    EXPECT_EQ(sv1.compare(3, 3, sv3), 1);
-    EXPECT_EQ(sv1.compare(0, 3, sv4), -1);
+    EXPECT_GT(sv1.compare(3, 3, sv3), 0);
+    EXPECT_LT(sv1.compare(0, 3, sv4), 0);
     EXPECT_EQ(sv1.compare(3, 3, sv4), 0);
 
     // compare(size_type, size_type, basic_string_view, size_type, size_type)
     EXPECT_EQ(sv1.compare(0, 3, sv2, 0, 3), 0);
-    EXPECT_EQ(sv1.compare(0, 3, sv2, 3, 3), -1);
+    EXPECT_LT(sv1.compare(0, 3, sv2, 3, 3), 0);
     EXPECT_EQ(sv1.compare(3, 3, sv2, 3, 3), 0);
-    EXPECT_EQ(sv1.compare(3, 3, sv2, 0, 3), 1);
+    EXPECT_GT(sv1.compare(3, 3, sv2, 0, 3), 0);
 
     // compare(const value_type*)
     EXPECT_EQ(sv1.compare(""), 1);
     EXPECT_EQ(sv1.compare(sv2.data()), 0);
     EXPECT_EQ(sv1.compare(sv3.data()), 1);
-    EXPECT_EQ(sv1.compare(sv4.data()), -1);
+    EXPECT_LT(sv1.compare(sv4.data()), 0);
 
     // compare(size_type, size_type, const value_type*)
     EXPECT_EQ(sv1.compare(0, 3, sv3.data()), 0);
-    EXPECT_EQ(sv1.compare(3, 3, sv3.data()), 1);
-    EXPECT_EQ(sv1.compare(0, 3, sv4.data()), -1);
+    EXPECT_GT(sv1.compare(3, 3, sv3.data()), 0);
+    EXPECT_LT(sv1.compare(0, 3, sv4.data()), 0);
     EXPECT_EQ(sv1.compare(3, 3, sv4.data()), 0);
 
     // compare(size_type, size_type, const value_type*, size_type)
     EXPECT_EQ(sv1.compare(0, 3, sv2.data(), 3), 0);
-    EXPECT_EQ(sv1.compare(0, 3, sv2.data() + 3, 3), -1);
+    EXPECT_LT(sv1.compare(0, 3, sv2.data() + 3, 3), 0);
     EXPECT_EQ(sv1.compare(3, 3, sv2.data() + 3, 3), 0);
-    EXPECT_EQ(sv1.compare(3, 3, sv2.data(), 3), 1);
+    EXPECT_GT(sv1.compare(3, 3, sv2.data(), 3), 0);
 }
 
 TEST(StringViewTest, operation2)
