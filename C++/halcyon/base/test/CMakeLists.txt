@@ -68,6 +68,10 @@ target_link_libraries(ut_any gtest pthread)
 add_executable(ut_base64 ${SRC_PATH}/ut_base64.cpp)
 target_link_libraries(ut_base64 gtest halcyon_base pthread)
 
+# blocking_queue
+add_executable(ut_blocking_queue ${SRC_PATH}/ut_blocking_queue.cpp)
+target_link_libraries(ut_blocking_queue pthread)
+
 # count_down_latch
 add_executable(ut_count_down_latch ${SRC_PATH}/ut_count_down_latch.cpp)
 target_link_libraries(ut_count_down_latch pthread)
