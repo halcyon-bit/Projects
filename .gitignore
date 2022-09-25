@@ -34,16 +34,11 @@
 # vs
 .vs
 tmp
-win64_v141_Debug
-win64_v142_Debug
-win64_v143_Debug
-win64_v141_Release
-win64_v142_Release
-win64_v143_Release
+packages
+win64_*
 
 # linux
-linux_debug
-linux_release
+linux_*
 build
 
 # other
