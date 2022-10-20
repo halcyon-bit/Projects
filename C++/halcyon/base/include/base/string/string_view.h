@@ -33,11 +33,7 @@ public:
     using difference_type = std::ptrdiff_t;
 
 public:
-#if defined USE_CPP11 || defined USE_CPP14
-    static size_type npos;
-#else
     static constexpr size_type npos{ size_type(-1) };
-#endif
 
 public:  /// 构造函数
     constexpr basic_string_view() noexcept = default;
@@ -445,10 +441,8 @@ private:
     size_type size_{ 0 };
 };
 
-#if defined USE_CPP11 || defined USE_CPP14
 template<typename CharT, typename Traits>
-typename basic_string_view<CharT, Traits>::size_type basic_string_view<CharT, Traits>::npos = typename basic_string_view<CharT, Traits>::size_type(-1);
-#endif
+constexpr typename basic_string_view<CharT, Traits>::size_type basic_string_view<CharT, Traits>::npos;
 
 /// 比较运算符
 template<typename CharT, typename Traits>
