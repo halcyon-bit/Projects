@@ -5,15 +5,10 @@
 #include <string>
 #include <fstream>
 
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_STRING_VIEW
 #include <base/string/string_view.h>
 #else
 #include <string_view>
-
-BASE_BEGIN_NAMESPACE
-using std::string_view;
-BASE_END_NAMESPACE
-
 #endif
 
 BASE_BEGIN_NAMESPACE
@@ -35,7 +30,11 @@ public:
      * @brief       构造函数
      * @param[in]   字符串
      */
+#ifdef USE_HALCYON_STRING_VIEW
     MD5(string_view str);
+#else
+    MD5(std::string_view str);
+#endif
 
     /**
      * @brief       构造函数(计算文件的MD5)（待优化）
@@ -55,7 +54,11 @@ public:
      * @brief       计算字符串的MD5
      * @param[in]   字符串
      */
+#ifdef USE_HALCYON_STRING_VIEW
     void update(string_view str);
+#else
+    void update(std::string_view str);
+#endif
 
     /**
      * @brief       计算文件的MD5（待优化）

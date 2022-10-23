@@ -102,6 +102,10 @@ target_link_libraries(ut_singleton pthread)
 add_executable(ut_string_view ${SRC_PATH}/ut_string_view.cpp)
 target_link_libraries(ut_string_view gtest pthread)
 
+# timestamp
+add_executable(ut_timestamp ${SRC_PATH}/ut_timestamp.cpp)
+target_link_libraries(ut_timestamp pthread)
+
 # version
 add_executable(ut_version ${SRC_PATH}/ut_version.cpp)
 target_link_libraries(ut_version halcyon_base)

@@ -10,8 +10,6 @@
 
 BASE_BEGIN_NAMESPACE
 
-using std::chrono::milliseconds;
-
 /**
  * @brief   带锁的队列(暂不支持多线程退出，需要多次唤醒)
  * @ps      每次 take(无超时) 必获取数据, 所以停止需要自定义规则
@@ -70,7 +68,7 @@ public:
         std::unique_lock<std::mutex> lock(mutex_);
         // 超时等待(当有数据时或者超时，返回结果)
         // wait_for 返回 true 表示线程被唤醒, false 表示超时
-        if (cv_.wait_for(lock, milliseconds(millsec), [this] { return !queue_.empty(); })) {
+        if (cv_.wait_for(lock, std::chrono::milliseconds(millsec), [this] { return !queue_.empty(); })) {
             data = std::move(queue_.front());
             queue_.pop_front();
             return true;

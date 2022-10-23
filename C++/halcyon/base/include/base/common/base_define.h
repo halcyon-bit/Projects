@@ -25,3 +25,13 @@
 #else
 #define  HALCYON_BASE_API
 #endif
+
+// use string in halcyon::base replace std::string
+//#define USE_HALCYON_STRING
+
+// use string_view in halcyon::base replace std::string_view
+//#define USE_HALCYON_STRING_VIEW
+
+#if defined USE_CPP11 || defined USE_CPP14
+#define USE_HALCYON_STRING_VIEW
+#endif

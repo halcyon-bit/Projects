@@ -61,7 +61,15 @@
 #endif
 
 #ifdef USE_CPP11
+// C++11 constexpr 函数只能有一条语句
 #define CONSTEXPR
 #else
 #define CONSTEXPR constexpr
+#endif
+
+#if defined USE_CPP11 || defined USE_CPP14
+#define FALLTHROUGH
+#else
+// c++17 for switch
+#define FALLTHROUGH     [[fallthrough]]
 #endif

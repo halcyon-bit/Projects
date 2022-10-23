@@ -84,7 +84,11 @@ MD5::MD5(const void* input, size_t length)
     update(input, length);
 }
 
+#ifdef USE_HALCYON_STRING_VIEW
 MD5::MD5(string_view str)
+#else
+MD5::MD5(std::string_view str)
+#endif
 {
     reset();
     update(str);
@@ -122,7 +126,11 @@ void MD5::update(const void* input, size_t length)
     update((const uint8_t*)input, length);
 }
 
+#ifdef USE_HALCYON_STRING_VIEW
 void MD5::update(string_view str)
+#else
+void MD5::update(std::string_view str)
+#endif
 {
     update((const uint8_t*)str.data(), str.length());
 }

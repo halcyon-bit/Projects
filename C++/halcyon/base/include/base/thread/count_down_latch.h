@@ -8,8 +8,6 @@
 
 BASE_BEGIN_NAMESPACE
 
-using std::chrono::milliseconds;
-
 /**
  * @brief   同步工具类
  *      能够使一个或多个线程在等待另外一些线程完成各自工作之后，再继续执行。
@@ -47,7 +45,7 @@ public:
     bool waitFor(uint32_t timeout)
     {
         std::unique_lock<std::mutex> lock(mutex_);
-        return cv_.wait_for(lock, milliseconds(timeout), [&] { return !(count_ > 0); });
+        return cv_.wait_for(lock, std::chrono::milliseconds(timeout), [&] { return !(count_ > 0); });
     }
 
     /**

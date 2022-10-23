@@ -336,7 +336,7 @@ public:
             return Invoker::invoke(func_.gen_func FUNCTION_COMMA FUNCTION_ARGS);
         }
         else {
-            throw std::logic_error("invalid function");
+            throw std::logic_error("bad function call");
         }
     }
 

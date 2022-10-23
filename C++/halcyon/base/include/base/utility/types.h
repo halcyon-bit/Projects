@@ -156,6 +156,7 @@ inline To horrible_cast(const From input)
     return u.out;
 }
 
+
 BASE_END_NAMESPACE
 
 #ifdef USE_CPP11
@@ -164,5 +165,8 @@ namespace std
 {
     template<typename T>
     using decay_t = typename ::std::decay<T>::type;
+
+    template<size_t Len, size_t Align = alignof(max_align_t)>
+    using aligned_storage_t = typename aligned_storage<Len, Align>::type;
 }
 #endif

@@ -12,7 +12,6 @@ BASE_END_NAMESPACE
 
 string Base64::encode(const uint8_t* str, int32_t length)
 {
-    int32_t num{ 0 }, bin{ 0 };
     string result;
     const uint8_t* current{ str };
     while (length > 2) {
@@ -62,7 +61,7 @@ string Base64::decode(const char* str, int32_t length)
         -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2, -2
     };
 
-    int32_t bin{ 0 }, i{ 0 }, pos{ 0 };
+    int32_t bin{ 0 }, i{ 0 };
     string result;
     const char* current{ str };
     char ch;
