@@ -6,6 +6,35 @@
 #include <assert.h>
 #endif
 
+#include <iterator>
+
+#ifdef USE_CPP11
+// C++14
+namespace std
+{
+    template<typename T>
+    using decay_t = typename ::std::decay<T>::type;
+
+    template<size_t Len, size_t Align = alignof(max_align_t)>
+    using aligned_storage_t = typename aligned_storage<Len, Align>::type;
+
+    template<bool B, typename T = void>
+    using enable_if_t = typename enable_if<B, T>::type;
+
+    template<bool B, typename T, typename F>
+    using conditional_t = typename std::conditional<B, T, F>::type;
+}
+#endif
+
+#if defined USE_CPP11 || defined USE_CPP14
+// C++17 
+namespace std
+{
+    template <typename... T>
+    using void_t = void;
+}
+#endif
+
 BASE_BEGIN_NAMESPACE
 
 // Taken from google-protobuf stubs/common.h
@@ -157,16 +186,32 @@ inline To horrible_cast(const From input)
 }
 
 
+
+/// 迭代器判断
+template<typename Iter>
+using iter_cate = typename std::iterator_traits<Iter>::iterator_category;
+
+template<typename T, typename = void>
+struct is_iterator : std::false_type
+{};
+
+template<typename T>
+struct is_iterator<T, std::void_t<iter_cate<T>>> : std::true_type
+{};
+
+
+
+/// 获取整数序列中最大值
+template<size_t arg, size_t... rest>
+struct integer_max;
+
+template<size_t arg>
+struct integer_max<arg> : std::integral_constant<size_t, arg>
+{};
+
+template<size_t arg1, size_t arg2, size_t... rest>
+struct integer_max<arg1, arg2, rest...> : std::integral_constant<size_t, arg1 >= arg2 
+    ? integer_max<arg1, rest...>::value : integer_max<arg2, rest...>::value>
+{};
+
 BASE_END_NAMESPACE
-
-#ifdef USE_CPP11
-// C++11 以上会有的功能
-namespace std
-{
-    template<typename T>
-    using decay_t = typename ::std::decay<T>::type;
-
-    template<size_t Len, size_t Align = alignof(max_align_t)>
-    using aligned_storage_t = typename aligned_storage<Len, Align>::type;
-}
-#endif

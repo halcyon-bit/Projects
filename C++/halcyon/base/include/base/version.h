@@ -8,6 +8,6 @@ BASE_BEGIN_NAMESPACE
  * @brief       获取版本号
  * @return      版本号
  */
-const char* version();
+extern "C" HALCYON_BASE_API const char* version();
 
 BASE_END_NAMESPACE
