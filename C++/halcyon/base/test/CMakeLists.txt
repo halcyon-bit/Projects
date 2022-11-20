@@ -113,7 +113,7 @@ target_link_libraries(ut_timestamp pthread)
 add_executable(ut_types ${SRC_PATH}/ut_types.cpp)
 
 # utility
-add_executable(ut_types ${SRC_PATH}/ut_utility.cpp)
+add_executable(ut_utility ${SRC_PATH}/ut_utility.cpp)
 
 # variant
 add_executable(ut_variant ${SRC_PATH}/ut_variant.cpp)

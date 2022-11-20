@@ -33,11 +33,11 @@ std::string type_name()
 {
     using type = typename std::remove_reference<T>::type;
     std::unique_ptr<char, void(*)(void*)> own(
-#ifndef __GNUC__
+//#ifndef __GNUC__
         nullptr,
-#else
-        abi::__cxa_demangle(typeid(type).name(), nullptr, nullptr, nullptr),
-#endif
+//#else
+//        abi::__cxa_demangle(typeid(type).name(), nullptr, nullptr, nullptr),
+//#endif
         std::free);
     std::string res = own != nullptr ? own.get() : typeid(type).name();
     if (std::is_const<type>::value)
