@@ -1,15 +1,9 @@
 ﻿#pragma once
 
-#include <base/common/base_define.h>
+#include <base/utility/types.h>  // std::decay_t, std::enable_if_t
 
 #include <memory>
 #include <typeindex>
-
-#ifdef USE_CPP11
-#include <base/utility/types.h>
-#else
-#include <type_traits>  // std::decay_t
-#endif
 
 BASE_BEGIN_NAMESPACE
 
@@ -58,7 +52,8 @@ public:
         }
         return *this;
     }
-    Any& operator=(Any&& rhs) noexcept {
+    Any& operator=(Any&& rhs) noexcept
+    {
         if (this != &rhs) {
             ptr_ = std::move(rhs.ptr_);
             type_ = rhs.type_;
@@ -71,10 +66,19 @@ public:
     /**
      * @brief   其他类型转换为 Any(排除 Any 类型 std::enable_if)
      */
-    template<typename U, typename = typename std::enable_if<!std::is_same<std::decay_t<U>, Any>::value, U>::type> Any(U&& value)
+    template<typename U, typename = std::enable_if_t<!std::is_same<std::decay_t<U>, Any>::value, U>>
+    Any(U&& value)
         : ptr_(new Derived<std::decay_t<U>>(std::forward<U>(value)))
         , type_(std::type_index(typeid(std::decay_t<U>)))
     {}
+
+    template<typename U, typename = std::enable_if_t<!std::is_same<std::decay_t<U>, Any>::value, U>>
+    Any& operator=(U&& value)
+    {
+        ptr_.reset(new Derived<std::decay_t<U>>(std::forward<U>(value)));
+        type_ = std::type_index(typeid(std::decay_t<U>));
+        return *this;
+    }
 
 public:
     /**

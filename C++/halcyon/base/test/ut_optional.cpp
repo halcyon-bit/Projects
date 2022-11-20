@@ -22,6 +22,67 @@ struct TestA
     }
 };
 
+static size_t move_count = 0;
+class TestMove
+{
+public:
+    TestMove()
+    {
+        data_ = new char[100];
+    }
+
+    ~TestMove()
+    {
+        if (valid_) {
+            ++move_count;
+            delete[] data_;
+        }
+    }
+
+    TestMove(const TestMove& rhs)
+    {
+        data_ = new char[100];
+    }
+    TestMove& operator=(const TestMove& rhs)
+    {
+        data_ = new char[100];
+    }
+
+    TestMove(TestMove&& rhs)
+    {
+        data_ = rhs.data_;
+        rhs.data_ = nullptr;
+        rhs.valid_ = false;
+    }
+    TestMove& operator=(TestMove&& rhs)
+    {
+        if (&rhs != this) {
+            data_ = rhs.data_;
+            rhs.data_ = nullptr;
+            rhs.valid_ = false;
+        }
+        return *this;
+    }
+
+    bool valid_{ true };
+    char* data_{ nullptr };
+};
+
+static size_t no_move_count = 0;
+class TestNoMove
+{
+public:
+    TestNoMove() = default;
+
+    ~TestNoMove()
+    {
+        ++no_move_count;
+    }
+
+    TestNoMove(const TestNoMove& rhs) = default;
+    TestNoMove& operator=(const TestNoMove& rhs) = default;
+};
+
 TEST(OptionalTest, constructor)
 {
     {
@@ -216,6 +277,88 @@ TEST(OptionalTest, operator_)
         const base::Optional<TestA> op4;
         EXPECT_EQ(op4.operator bool(), false);
         EXPECT_TRUE(op4 == false);
+    }
+}
+
+TEST(OptionalTest, move_1)
+{
+    std::string str1{ "hello" };
+    std::string str2{ "hello" };
+    std::string str3{ "world" };
+    base::Optional<std::string> op1{ std::move(str1) };
+    EXPECT_EQ(op1.isInit(), true);
+    EXPECT_EQ(*op1, str2);
+    EXPECT_EQ(str1.empty(), true);
+
+    base::Optional<std::string> op2{ str2 };
+    EXPECT_EQ(op2.isInit(), true);
+    EXPECT_EQ(*op2, str2);
+    EXPECT_EQ(str2.empty(), false);
+
+    base::Optional<std::string> op3(op1);
+    EXPECT_EQ(op3.isInit(), true);
+    EXPECT_EQ(*op3, *op1);
+    EXPECT_EQ(*op3, str2);
+
+    base::Optional<std::string> op4;
+    base::Optional<std::string> op5(op4);
+    EXPECT_EQ(op5.isInit(), false);
+
+    base::Optional<std::string> op6(std::move(op1));
+    EXPECT_EQ(op1.isInit(), false);
+    EXPECT_EQ(op6.isInit(), true);
+    EXPECT_EQ(*op6, str2);
+
+    base::Optional<std::string> op7(std::move(op4));
+    EXPECT_EQ(op4.isInit(), false);
+    EXPECT_EQ(op7.isInit(), false);
+
+    base::Optional<std::string> op8{ str3 };
+    EXPECT_EQ(*op8, str3);
+    op8 = op2;
+    EXPECT_EQ(op8.isInit(), true);
+    EXPECT_EQ(*op8, str2);
+    op8 = op5;
+    EXPECT_EQ(op8.isInit(), false);
+
+    base::Optional<std::string> op9{ str3 };
+    EXPECT_EQ(*op9, str3);
+    op9 = std::move(op2);
+    EXPECT_EQ(*op9, str2);
+    EXPECT_EQ(op2.isInit(), false);
+    op9 = std::move(op8);
+    EXPECT_EQ(op9.isInit(), false);
+}
+
+TEST(OptionalTest, move_2)
+{
+    {
+        TestNoMove t;
+        base::Optional<TestNoMove> op1{ t };
+        base::Optional<TestNoMove> op2(std::move(op1));
+        EXPECT_EQ(op1.isInit(), false);
+        EXPECT_EQ(op2.isInit(), true);
+        EXPECT_EQ(no_move_count, 1);
+
+        base::Optional<TestNoMove> op3;
+        op3 = std::move(op2);
+        EXPECT_EQ(op2.isInit(), false);
+        EXPECT_EQ(op3.isInit(), true);
+        EXPECT_EQ(no_move_count, 2);
+    }
+    {
+        TestMove t;
+        base::Optional<TestMove> op1{ t };
+        base::Optional<TestMove> op2(std::move(op1));
+        EXPECT_EQ(op1.isInit(), false);
+        EXPECT_EQ(op2.isInit(), true);
+        EXPECT_EQ(move_count, 0);
+
+        base::Optional<TestMove> op3;
+        op3 = std::move(op2);
+        EXPECT_EQ(op2.isInit(), false);
+        EXPECT_EQ(op3.isInit(), true);
+        EXPECT_EQ(move_count, 0);
     }
 }
 

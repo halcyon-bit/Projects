@@ -1,10 +1,6 @@
 #pragma once
 
-#include <base/common/base_define.h>
-
-#ifdef USE_CPP11
 #include <base/utility/types.h>  // std::aligned_storage_t
-#endif
 
 #include <stdexcept>
 
@@ -37,32 +33,45 @@ public:  // 构造函数
     Optional(const Optional& rhs)
     {
         if (rhs.isInit()) {
-            assign(rhs);
+            copy(rhs.data_);
         }
     }
 
-    Optional(Optional&& rhs)
+    Optional(Optional&& rhs) noexcept
     {
         if (rhs.isInit()) {
-            assign(std::forward<Optional>(rhs));
-            rhs.destory();
+            move(std::move(rhs.data_));
+            rhs.destroy();
         }
     }
 
     ~Optional()
     {
-        destory();
+        destroy();
     }
 
     Optional& operator=(const Optional& rhs)
     {
-        assign(rhs);
+        if (this == &rhs) {
+            return *this;
+        }
+        destroy();  // 销毁自身
+        if (rhs.isInit()) {
+            copy(rhs.data_);
+        }
         return *this;
     }
 
-    Optional& operator=(Optional&& rhs)
+    Optional& operator=(Optional&& rhs) noexcept
     {
-        assign(std::forward<Optional>(rhs));
+        if (this == &rhs) {
+            return *this;
+        }
+        destroy();  // 销毁自身
+        if (rhs.isInit()) {
+            move(std::move(rhs.data_));
+            rhs.destroy();
+        }
         return *this;
     }
 
@@ -78,7 +87,7 @@ public:
     template<typename... Args>
     void emplace(Args&&... args)
     {
-        destory();
+        destroy();
         create(std::forward<Args>(args)...);
     }
 
@@ -89,7 +98,7 @@ public:
             return *((T*)(&data_));
         }
         else {
-            throw std::logic_error("");
+            throw std::logic_error("Optional not initialized");
         }
     }
 
@@ -99,7 +108,7 @@ public:
             return *((T*)(&data_));
         }
         else {
-            throw std::logic_error("");
+            throw std::logic_error("Optional not initialized");
         }
     }
 
@@ -126,47 +135,24 @@ private:
         init_ = true;
     }
 
-    void destory()
+    void destroy()
     {
         if (init_) {
-            init_ = false;
             ((T*)(&data_))->~T();
-        }
-    }
-
-    void assign(const Optional& rhs)
-    {
-        if (rhs.isInit()) {
-            copy(rhs.data_);
-            init_ = true;
-        }
-        else {
-            destory();
-        }
-    }
-
-    void assign(Optional&& rhs)
-    {
-        if (rhs.isInit()) {
-            move(std::move(rhs.data_));
-            init_ = true;
-            rhs.destory();
-        }
-        else {
-            destory();
+            init_ = false;
         }
     }
 
     void copy(const value_type& val)
     {
-        destory();
         new (&data_) T(*((T*)(&val)));
+        init_ = true;
     }
 
     void move(value_type&& val)
     {
-        destory();
         new (&data_) T(std::move(*((T*)(&val))));
+        init_ = true;
     }
 
 private:

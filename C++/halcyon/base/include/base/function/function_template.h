@@ -1,7 +1,5 @@
 ﻿#include <base/utility/types.h>
-#ifdef USE_CPP11
 #include <base/utility/utility.h>  // std::exchange
-#endif
 
 #include <memory>
 #include <stdexcept>

@@ -7,6 +7,7 @@
 #endif
 
 #include <iterator>
+#include <type_traits>
 
 #ifdef USE_CPP11
 // C++14

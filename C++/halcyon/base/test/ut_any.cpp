@@ -72,19 +72,42 @@ TEST(AnyTest, assignment)
     EXPECT_EQ(true, any1.is<std::string>());
     EXPECT_EQ(s, any1.anyCast<std::string>());
 
-    base::Any any2;
-    any2 = any1;
-    EXPECT_EQ(true, any2.is<std::string>());
-    EXPECT_EQ(s, any2.anyCast<std::string>());
+    // std::map
+    std::map<int32_t, std::string> m{ {1, "a"}, {2, "b"}, {3, "c"} };
+    base::Any any2 = m;
+    bool b = any2.is<std::map<int32_t, std::string>>();
+    EXPECT_EQ(true, b);
+    auto res = any2.anyCast<std::map<int32_t, std::string>>();
+    EXPECT_EQ(m, res);
+
+    base::Any any3 = (int)100;
+    EXPECT_EQ(true, any3.is<int>());
+    EXPECT_EQ(100, any3.anyCast<int>());
+
+    any3 = any1;
+    EXPECT_EQ(true, any3.is<std::string>());
+    EXPECT_EQ(s, any3.anyCast<std::string>());
     EXPECT_EQ(true, any1.is<std::string>());
     EXPECT_EQ(s, any1.anyCast<std::string>());
 
-    base::Any any3;
-    any3 = std::move(any2);
-    EXPECT_EQ(true, any3.is<std::string>());
-    EXPECT_EQ(s, any3.anyCast<std::string>());
+    any1 = std::move(any2);
+    b = any1.is<std::map<int32_t, std::string>>();
+    EXPECT_EQ(true, b);
+    res = any1.anyCast<std::map<int32_t, std::string>>();
+    EXPECT_EQ(m, res);
     EXPECT_EQ(true, any2.is<void>());
     EXPECT_EQ(true, any2.isNull());
+
+    int n = 100;
+    any3 = n;
+    EXPECT_EQ(true, any3.is<int>());
+    EXPECT_EQ(100, any3.anyCast<int>());
+
+    any3 = m;
+    b = any3.is<std::map<int32_t, std::string>>();
+    EXPECT_EQ(true, b);
+    res = any3.anyCast<std::map<int32_t, std::string>>();
+    EXPECT_EQ(m, res);
 }
 
 TEST(AnyTest, memberFunc)
