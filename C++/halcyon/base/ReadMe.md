@@ -4,19 +4,11 @@
 
 ## 版本
 
-### 1.0.0
+### 1.0.2
 
-- 增加 any 模块
-- 增加 base64 模块
-- 增加 common 模块
-- 增加 function 模块
-- 增加 md5 模块
-- 增加 range 模块
-- 增加 singleton 模块
-- 增加 string 模块
-- 增加 thread 模块
-- 增加 time 模块
-- 增加 utility 模块
+- 增加 optional
+- 增加 timestamp
+- 增加 variant
 
 ## 功能
 
@@ -54,6 +46,12 @@
 | ----- | -------------------------- |
 | md5.h | md5 加密（以库的形式提供） |
 
+### optional
+
+| 模块       | 说明                                           |
+| ---------- | ---------------------------------------------- |
+| optional.h | 管理一个可选的值，即可以存在也可以不存在的值。 |
+
 ### range
 
 | 模块    | 说明                                                         |
@@ -83,9 +81,16 @@
 
 对 std::chrono 封装，方便调用
 
-| 模块            | 说明   |
-| --------------- | ------ |
-| elapsed_timer.h | 计时器 |
+| 模块            | 说明                            |
+| --------------- | ------------------------------- |
+| elapsed_timer.h | 计时器                          |
+| timestamp.h     | 对 std::chrono 的封装，便于使用 |
+
+### variant
+
+| 模块    | 说明         |
+| ------- | ------------ |
+| variant | 类似于 union |
 
 ### utility
 
@@ -103,3 +108,5 @@ project 目录下选择对应的版本，可以调整 C++ 的标准。
 ### 其他
 
 使用 project 目录下的 CMakeLists.txt。
+
+cmake -D CMAKE_BUILD_CXX_STANDARD=c++11 ..
