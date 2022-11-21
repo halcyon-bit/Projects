@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include <base/utility/types.h>  // std::decay_t, std::enable_if_t
+#include <base/utility/type.h>  // std::decay_t, std::enable_if_t
 
 #include <memory>
 #include <typeindex>

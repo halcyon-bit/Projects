@@ -3,8 +3,8 @@
 #include "gtest/gtest.h"
 
 #include <string>
-#include <iostream>
 #include <memory>
+#include <iostream>
 using namespace halcyon;
 
 struct TestA
@@ -36,15 +36,17 @@ TEST(LazyTest, lazy_test)
     auto lazy1 = base::lazy(func, 10);
     EXPECT_EQ(lazy1.hasValue(), false);
     EXPECT_EQ(lazy1.value(), 100);
+    EXPECT_EQ(lazy1.hasValue(), true);
 
     auto lazy2 = base::lazy([]() { return std::string("hello world"); });
     EXPECT_EQ(lazy2.hasValue(), false);
     EXPECT_EQ(lazy2.value(), std::string("hello world"));
+    EXPECT_EQ(lazy2.hasValue(), true);
 
-    std::cout << "create lazy value" << std::endl;
-    auto lazy3 = base::lazy([](int n, double f, const std::string& s) {return std::make_shared<TestA>(n, f, s); },
-        100, 1.23, "hello");
-    std::cout << "load value" << std::endl;
+    auto func = [](int n, double f, const std::string& s) {
+        return std::make_shared<TestA>(n, f, s);
+    };
+    auto lazy3 = base::lazy(func, 100, 1.23, "hello");
     EXPECT_EQ(lazy3.hasValue(), false);
     lazy3.value();
     EXPECT_EQ(lazy3.hasValue(), true);

@@ -24,6 +24,9 @@ namespace std
 
     template<bool B, typename T, typename F>
     using conditional_t = typename std::conditional<B, T, F>::type;
+
+    template<typename T>
+    using result_of_t = typename result_of<T>::type;
 }
 #endif
 

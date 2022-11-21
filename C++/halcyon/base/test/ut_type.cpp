@@ -1,4 +1,4 @@
-#include "base/utility/types.h"
+#include "base/utility/type.h"
 
 #include <string>
 #include <iostream>
@@ -19,7 +19,6 @@ int main()
 
     std::cout << "std::string::iterator is iterator: " << base::is_iterator<std::string::iterator>::value << std::endl;
     std::cout << "std::string::const_iterator is iterator: " << base::is_iterator<std::string::const_iterator>::value << std::endl;
-
 
     std::cout << std::endl << std::endl;
     // 获取整数序列中最大值

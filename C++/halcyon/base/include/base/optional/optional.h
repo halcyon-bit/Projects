@@ -1,6 +1,6 @@
 #pragma once
 
-#include <base/utility/types.h>  // std::aligned_storage_t
+#include <base/utility/type.h>  // std::aligned_storage_t
 
 #include <stdexcept>
 
