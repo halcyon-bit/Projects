@@ -15,7 +15,7 @@ BASE_BEGIN_NAMESPACE
  *  务后，计数器的值就会减一。当计数器的值为0时，表示所有的线程都已经完成
  *  任务，然后在 CountDownLatch 上等待的线程就可以恢复执行接下来的任务。
  */
-class CountDownLatch : public noncopyable
+class CountDownLatch : noncopyable
 {
 public:
     /**

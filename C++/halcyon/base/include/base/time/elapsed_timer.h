@@ -7,7 +7,7 @@
 BASE_BEGIN_NAMESPACE
 
 /// 计时器
-class ElapsedTimer : public noncopyable
+class ElapsedTimer : noncopyable
 {
 public:
     ElapsedTimer()

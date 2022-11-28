@@ -7,7 +7,7 @@
 BASE_BEGIN_NAMESPACE
 
 /// base64 编码与解码
-class HALCYON_BASE_API Base64 : public noncopyable
+class HALCYON_BASE_API Base64 : noncopyable
 {
 public:
     Base64() = default;

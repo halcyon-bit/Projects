@@ -27,7 +27,7 @@
 BASE_BEGIN_NAMESPACE
 
 /// 持有闭包函数
-class _DeferredAction : public noncopyable
+class _DeferredAction : noncopyable
 {
 public:
     /**

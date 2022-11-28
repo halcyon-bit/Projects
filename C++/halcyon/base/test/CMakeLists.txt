@@ -86,6 +86,10 @@ add_executable(ut_elapsed_timer ${SRC_PATH}/ut_elapsed_timer.cpp)
 add_executable(ut_function ${SRC_PATH}/ut_function.cpp)
 target_link_libraries(ut_function gtest pthread)
 
+# lazy
+add_executable(ut_lazy ${SRC_PATH}/ut_lazy.cpp)
+target_link_libraries(ut_lazy gtest pthread)
+
 # md5
 add_executable(ut_md5 ${SRC_PATH}/ut_md5.cpp)
 target_link_libraries(ut_md5 gtest halcyon_base pthread)
@@ -104,6 +108,10 @@ target_link_libraries(ut_singleton pthread)
 # string_view
 add_executable(ut_string_view ${SRC_PATH}/ut_string_view.cpp)
 target_link_libraries(ut_string_view gtest pthread)
+
+# thread
+add_executable(ut_thread ${SRC_PATH}/ut_thread.cpp)
+target_link_libraries(ut_thread pthread)
 
 # timestamp
 add_executable(ut_timestamp ${SRC_PATH}/ut_timestamp.cpp)

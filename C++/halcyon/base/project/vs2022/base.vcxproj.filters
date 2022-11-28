@@ -43,6 +43,9 @@
     <Filter Include="variant">
       <UniqueIdentifier>{d68e4d01-49c0-4cda-a618-c8b2fc1c2333}</UniqueIdentifier>
     </Filter>
+    <Filter Include="task">
+      <UniqueIdentifier>{2be808f6-37df-49ae-a4b2-e1ba4be07d2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\base\base64\base64.h">
@@ -114,6 +117,18 @@
     <ClInclude Include="..\..\include\base\utility\type.h">
       <Filter>utility</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\include\base\task\task.h">
+      <Filter>task</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\thread\thread.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\thread\thread_task.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\thread\thread_pool.h">
+      <Filter>thread</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\base64\base64.cpp">
@@ -124,6 +139,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\version.cpp">
       <Filter>version</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\thread\thread_pool.cpp">
+      <Filter>thread</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

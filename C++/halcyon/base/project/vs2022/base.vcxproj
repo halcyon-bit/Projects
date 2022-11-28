@@ -25,8 +25,12 @@
     <ClInclude Include="..\..\include\base\range\range.h" />
     <ClInclude Include="..\..\include\base\singleton\singleton.h" />
     <ClInclude Include="..\..\include\base\string\string_view.h" />
+    <ClInclude Include="..\..\include\base\task\task.h" />
     <ClInclude Include="..\..\include\base\thread\blocking_queue.h" />
     <ClInclude Include="..\..\include\base\thread\count_down_latch.h" />
+    <ClInclude Include="..\..\include\base\thread\thread.h" />
+    <ClInclude Include="..\..\include\base\thread\thread_pool.h" />
+    <ClInclude Include="..\..\include\base\thread\thread_task.h" />
     <ClInclude Include="..\..\include\base\time\elapsed_timer.h" />
     <ClInclude Include="..\..\include\base\time\timestamp.h" />
     <ClInclude Include="..\..\include\base\utility\lazy.h" />
@@ -38,6 +42,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\base64\base64.cpp" />
     <ClCompile Include="..\..\src\md5\md5.cpp" />
+    <ClCompile Include="..\..\src\thread\thread_pool.cpp" />
     <ClCompile Include="..\..\src\version.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
