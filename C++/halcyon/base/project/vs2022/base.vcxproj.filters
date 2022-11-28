@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="base64">
+      <UniqueIdentifier>{536c823f-6e06-480d-8ae2-152cc873cf2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="md5">
+      <UniqueIdentifier>{4ee44dbc-3265-45b8-9ce7-0acb496a14ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="function">
+      <UniqueIdentifier>{c0952ee2-0bb5-4287-92f9-49b80c12f461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="time">
+      <UniqueIdentifier>{1b8797fe-5f50-4bf3-afca-b6a75253eac1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="singleton">
+      <UniqueIdentifier>{4bd0e194-90f8-4794-b3f1-5bf08abed3b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="range">
+      <UniqueIdentifier>{827282d7-cba0-446a-9480-e06f515e5a7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="any">
+      <UniqueIdentifier>{591d16db-4240-4d57-9cb5-ad5ddec297a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thread">
+      <UniqueIdentifier>{484074c2-987e-4aef-b75b-12fe76bdbb39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="version">
+      <UniqueIdentifier>{ac55c7a3-19b0-42dc-acae-5622039cba84}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="common">
+      <UniqueIdentifier>{128e96da-e833-4cba-b48c-8270ed47699c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="string">
+      <UniqueIdentifier>{6ea29d55-fe41-434e-9a92-c08071dfbcee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="optional">
+      <UniqueIdentifier>{28bfe48f-6f4a-4bd7-9ed9-df4aca3ca9ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="utility">
+      <UniqueIdentifier>{c4b5bfee-37f5-4e6a-b57e-7d505c8b57a6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="variant">
+      <UniqueIdentifier>{d68e4d01-49c0-4cda-a618-c8b2fc1c2333}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\base\base64\base64.h">
+      <Filter>base64</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\any\any.h">
+      <Filter>any</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\common\base_define.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\common\noncopyable.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\common\platform.h">
+      <Filter>common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\function\defer.h">
+      <Filter>function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\function\function.h">
+      <Filter>function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\function\function_template.h">
+      <Filter>function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\function\weak_callback.h">
+      <Filter>function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\md5\md5.h">
+      <Filter>md5</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\range\range.h">
+      <Filter>range</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\thread\count_down_latch.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\time\elapsed_timer.h">
+      <Filter>time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\version.h">
+      <Filter>version</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\singleton\singleton.h">
+      <Filter>singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\thread\blocking_queue.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\string\string_view.h">
+      <Filter>string</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\time\timestamp.h">
+      <Filter>time</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\optional\optional.h">
+      <Filter>optional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\utility\utility.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\utility\lazy.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\variant\variant.h">
+      <Filter>variant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\utility\type.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\base64\base64.cpp">
+      <Filter>base64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\md5\md5.cpp">
+      <Filter>md5</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\version.cpp">
+      <Filter>version</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

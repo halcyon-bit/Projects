@@ -85,31 +85,31 @@ public:
 TEST(VariantTest, constructor)
 {
     {
-        base::Variant<int, std::string> var1;
+        base::Variant<double, int, std::string> var1;
         EXPECT_EQ(var1.is<void>(), true);
 
-        base::Variant<int, std::string> var2(std::string("123"));
+        base::Variant<double, int, std::string> var2(std::string("123"));
         EXPECT_EQ(var2.is<std::string>(), true);
         EXPECT_EQ(var2.get<std::string>(), std::string("123"));
 
-        base::Variant<int, std::string> var3(123);
+        base::Variant<double, int, std::string> var3(123);
         EXPECT_EQ(var3.is<int>(), true);
         EXPECT_EQ(var3.get<int>(), 123);
 
-        base::Variant<int, std::string> var4(var2);
+        base::Variant<double, int, std::string> var4(var2);
         EXPECT_EQ(var4.is<std::string>(), true);
         EXPECT_EQ(var4.get<std::string>(), std::string("123"));
 
-        base::Variant<int, std::string> var5(std::move(var4));
+        base::Variant<double, int, std::string> var5(std::move(var4));
         EXPECT_EQ(var5.is<std::string>(), true);
         EXPECT_EQ(var5.get<std::string>(), std::string("123"));
         EXPECT_EQ(var4.is<void>(), true);
 
-        base::Variant<int, std::string> var6(var3);
+        base::Variant<double, int, std::string> var6(var3);
         EXPECT_EQ(var6.is<int>(), true);
         EXPECT_EQ(var6.get<int>(), 123);
 
-        base::Variant<int, std::string> var7(std::move(var6));
+        base::Variant<double, int, std::string> var7(std::move(var6));
         EXPECT_EQ(var7.is<int>(), true);
         EXPECT_EQ(var7.get<int>(), 123);
         EXPECT_EQ(var6.is<void>(), true);
