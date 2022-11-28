@@ -113,12 +113,16 @@ target_link_libraries(ut_string_view gtest pthread)
 add_executable(ut_thread ${SRC_PATH}/ut_thread.cpp)
 target_link_libraries(ut_thread pthread)
 
+# threadpool
+add_executable(ut_threadpool ${SRC_PATH}/ut_threadpool.cpp)
+target_link_libraries(ut_threadpool halcyon_base pthread)
+
 # timestamp
 add_executable(ut_timestamp ${SRC_PATH}/ut_timestamp.cpp)
 target_link_libraries(ut_timestamp pthread)
 
-# types
-add_executable(ut_types ${SRC_PATH}/ut_types.cpp)
+# type
+add_executable(ut_type ${SRC_PATH}/ut_type.cpp)
 
 # utility
 add_executable(ut_utility ${SRC_PATH}/ut_utility.cpp)
