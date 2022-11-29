@@ -3,12 +3,11 @@
 #include <base/common/noncopyable.h>
 #include <base/thread/thread_task.h>
 
-#include <list>
-#include <mutex>
-#include <queue>
 #include <thread>
 
 BASE_BEGIN_NAMESPACE
+
+class ThreadPoolImpl;
 
 /// 线程池(调整任务类型为 ThreadTask)
 class HALCYON_BASE_API ThreadPool : noncopyable
@@ -34,18 +33,12 @@ public:
     /**
      * @brief   获取正在处于等待状态的线程个数
      */
-    size_t getWaitingThreadNum() const
-    {
-        return waiting_threads_.load(std::memory_order_acquire);
-    }
+    size_t getWaitingThreadNum() const;
 
     /**
      * @brief   获取线程池中当前线程的总个数
      */
-    size_t getTotalThreadNum() const
-    {
-        return threads_.size();
-    }
+    size_t getTotalThreadNum() const;
 
     /**
      * @brief       添加任务
@@ -56,11 +49,6 @@ public:
     template <typename F, typename... Args>
     TaskSPtr addTask(F&& func, Args&&... args)
     {
-        if (shutdown_.load(std::memory_order_acquire)) {
-            // 处于关闭状态
-            return nullptr;
-        }
-
 #if defined USE_CPP11 || defined USE_CPP14
         using return_type = std::result_of_t<F(Args...)>;
 #else
@@ -72,57 +60,29 @@ public:
         TaskSPtr result = std::make_shared<ThreadTask<return_type>>(
             [task]() { (*task)(); },
             task->get_future());
-        {
-            // 添加任务
-            std::lock_guard<std::mutex> lock(mutex_);
-            tasks_.emplace(result);
-        }
-        cv_.notify_one();
-        return result;
+
+        return addTask(result);
     }
 
     /**
      * @brief   停止线程池，还没有执行的任务会继续执行
      *        直到任务全部执行完成
      */
-    void shutDown()
-    {
-        shutDown(false);
-    }
+    void shutDown();
 
     /**
      * @brief   停止线程池，还没有执行的任务直接取消，不会再执行
      */
-    void shutDownNow()
-    {
-        shutDown(true);
-    }
+    void shutDownNow();
 
 private:
     /**
-     * @brief       停止线程池
-     * @param[in]   是否立即结束（不在运行剩余任务）
+     * @brief   添加任务至队列中
      */
-    void shutDown(bool stop_now);
-
-    /**
-     * @brief   线程函数
-     */
-    void threadProc();
+    TaskSPtr addTask(TaskSPtr task);
 
 private:
-    std::list<std::thread> threads_;  //! 所有的任务线程
-
-    // 这里并没有用 BlockingQueue, 是因为其多线程退出不好处理
-    std::mutex mutex_;  //! 任务队列锁
-    std::queue<TaskSPtr> tasks_;  //! 任务队列
-    std::condition_variable cv_;  //! 任务队列条件变量
-
-    std::atomic<size_t> waiting_threads_{ 0 };  //! 处于等待状态的线程
-
-    std::atomic<bool> shutdown_{ false };  //! 中止线程池(等待剩余任务运行完成)
-    std::atomic<bool> shutdown_now_{ false };  //! 中止线程池(放弃任务的运行)
-    bool started_{ false };  //! 是否启动
+    ThreadPoolImpl* impl_;
 };
 
 BASE_END_NAMESPACE

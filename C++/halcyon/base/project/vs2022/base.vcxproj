@@ -21,6 +21,7 @@
     <ClInclude Include="..\..\include\base\function\function_template.h" />
     <ClInclude Include="..\..\include\base\function\weak_callback.h" />
     <ClInclude Include="..\..\include\base\md5\md5.h" />
+    <ClInclude Include="..\..\include\base\message\message_bus.h" />
     <ClInclude Include="..\..\include\base\optional\optional.h" />
     <ClInclude Include="..\..\include\base\range\range.h" />
     <ClInclude Include="..\..\include\base\singleton\singleton.h" />

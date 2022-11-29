@@ -155,8 +155,8 @@ protected:
 
 private:
     friend class Thread;  // 线程
-    friend class ThreadPool;  // 线程池
     friend class TimerLoop;  // 定时器
+    friend class ThreadPoolImpl;  // 线程池
 
 private:
     /**
