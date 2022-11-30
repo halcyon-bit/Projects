@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_THREAD_TASK_H
+#define BASE_THREAD_TASK_H
 
 #include <base/task/task.h>
 
@@ -76,3 +77,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif

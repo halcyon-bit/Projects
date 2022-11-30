@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_RANGE_H
+#define BASE_RANGE_H
 
 #include <base/common/base_define.h>
 
@@ -185,3 +186,5 @@ auto range(T begin, T end, U step) -> RangeImpl<decltype(begin + step)>
 }
 
 BASE_END_NAMESPACE
+
+#endif

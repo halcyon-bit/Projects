@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_BLOCKING_QUEUE_H
+#define BASE_BLOCKING_QUEUE_H
 
 #include <base/common/noncopyable.h>
 
@@ -104,3 +105,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif

@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_ANY_H
+#define BASE_ANY_H
 
 #include <base/utility/type.h>  // std::decay_t, std::enable_if_t
 
@@ -161,3 +162,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif

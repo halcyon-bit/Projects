@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_FUNCTION_H
+#define BASE_FUNCTION_H
 
 #include <base/common/base_define.h>
 
@@ -109,3 +110,5 @@
 #undef  FUNCTION_TYPES
 #undef  FUNCTION_TYPE_ARGS
 #undef  FUNCTION_ARGS
+
+#endif

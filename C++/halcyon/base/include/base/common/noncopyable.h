@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_NONCOPYABLE_H
+#define BASE_NONCOPYABLE_H
 
 #include <base/common/base_define.h>
 
@@ -17,3 +18,5 @@ protected:
 };
 
 BASE_END_NAMESPACE
+
+#endif

@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_THREAD_POOL_H
+#define BASE_THREAD_POOL_H
 
 #include <base/common/noncopyable.h>
 #include <base/thread/thread_task.h>
@@ -86,3 +87,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif

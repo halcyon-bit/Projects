@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_VARIANT_H
+#define BASE_VARIANT_H
 
 #include <base/utility/type.h>
 #include <base/utility/utility.h>
@@ -260,3 +261,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif

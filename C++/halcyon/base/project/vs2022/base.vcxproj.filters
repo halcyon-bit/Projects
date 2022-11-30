@@ -123,9 +123,6 @@
     <ClInclude Include="..\..\include\base\task\task.h">
       <Filter>task</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\base\thread\thread.h">
-      <Filter>thread</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\base\thread\thread_task.h">
       <Filter>thread</Filter>
     </ClInclude>
@@ -134,6 +131,9 @@
     </ClInclude>
     <ClInclude Include="..\..\include\base\message\message_bus.h">
       <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\thread\thread.h">
+      <Filter>thread</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

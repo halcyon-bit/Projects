@@ -29,8 +29,8 @@
     <ClInclude Include="..\..\include\base\task\task.h" />
     <ClInclude Include="..\..\include\base\thread\blocking_queue.h" />
     <ClInclude Include="..\..\include\base\thread\count_down_latch.h" />
-    <ClInclude Include="..\..\include\base\thread\thread.h" />
     <ClInclude Include="..\..\include\base\thread\thread_pool.h" />
+    <ClInclude Include="..\..\include\base\thread\thread.h" />
     <ClInclude Include="..\..\include\base\thread\thread_task.h" />
     <ClInclude Include="..\..\include\base\time\elapsed_timer.h" />
     <ClInclude Include="..\..\include\base\time\timestamp.h" />

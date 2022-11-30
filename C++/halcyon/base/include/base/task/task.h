@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_TASK_H
+#define BASE_TASK_H
 
 #if defined USE_CPP11 || defined USE_CPP14
 #include <base/any/any.h>
@@ -19,7 +20,7 @@ inline void defaultCallback(Task*)
 /**
  * @brief   任务基类
  * @ps      可以异步获取任务结果，又需要擦除结果类型，方便将任务
- *        塞进队列，创建了基类...
+ *        塞进队列，创建了基类... 参考py 
  *        是否有其他更好的方法？任务结果在子类中。
  */
 class Task
@@ -175,3 +176,5 @@ using TaskSPtr = std::shared_ptr<Task>;
 using TaskWPtr = std::weak_ptr<Task>;
 
 BASE_END_NAMESPACE
+
+#endif

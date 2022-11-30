@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_TYPE_H
+#define BASE_TYPE_H
 
 #include <base/common/base_define.h>
 
@@ -219,3 +220,5 @@ struct integer_max<arg1, arg2, rest...> : std::integral_constant<size_t, arg1 >=
 {};
 
 BASE_END_NAMESPACE
+
+#endif

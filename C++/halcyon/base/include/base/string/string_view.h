@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_STRING_VIEW_H
+#define BASE_STRING_VIEW_H
 
 #include <base/common/base_define.h>
 
@@ -622,3 +623,5 @@ inline constexpr bool operator>=(const CharT* l, basic_string_view<CharT, Traits
 using string_view = basic_string_view<char, std::char_traits<char>>;
 
 BASE_END_NAMESPACE
+
+#endif

@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_WEAK_CALLBACK_H
+#define BASE_WEAK_CALLBACK_H
 
 #include <base/common/base_define.h>
 
@@ -61,3 +62,5 @@ WeakCallback<C, Args...> makeWeakCallback(const std::shared_ptr<C>& object,
 }
 
 BASE_END_NAMESPACE
+
+#endif

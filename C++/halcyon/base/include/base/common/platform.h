@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_PLATFORM_H
+#define BASE_PLATFORM_H
 
 /// 平台判断
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
@@ -72,4 +73,6 @@
 #else
 // c++17 for switch
 #define FALLTHROUGH     [[fallthrough]]
+#endif
+
 #endif

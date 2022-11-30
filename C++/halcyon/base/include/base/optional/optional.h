@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BASE_OPTIONAL_H
+#define BASE_OPTIONAL_H
 
 #include <base/utility/type.h>  // std::aligned_storage_t
 
@@ -162,3 +163,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif

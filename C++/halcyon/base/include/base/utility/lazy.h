@@ -1,4 +1,5 @@
-#pragma once
+#ifndef BASE_LAZY_H
+#define BASE_LAZY_H
 
 #include <base/optional/optional.h>
 
@@ -54,3 +55,5 @@ Lazy<std::invoke_result_t<F, Args...>> lazy(F&& f, Args&&... args)
 #endif
 
 BASE_END_NAMESPACE
+
+#endif

@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_MD5_H
+#define BASE_MD5_H
 
 #include <base/common/noncopyable.h>
 
@@ -133,3 +134,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif

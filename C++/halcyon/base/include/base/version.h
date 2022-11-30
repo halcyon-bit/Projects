@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_VERSION_H
+#define BASE_VERSION_H
 
 #include <base/common/base_define.h>
 
@@ -11,3 +12,5 @@ BASE_BEGIN_NAMESPACE
 extern "C" HALCYON_BASE_API const char* version();
 
 BASE_END_NAMESPACE
+
+#endif

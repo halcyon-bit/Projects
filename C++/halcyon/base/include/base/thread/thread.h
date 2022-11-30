@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_THREAD_H
+#define BASE_THREAD_H
 
 #include <base/utility/type.h>
 #include <base/thread/thread_task.h>
@@ -11,8 +12,9 @@ BASE_BEGIN_NAMESPACE
 
 /**
  * @brief   线程封装
- * @ps      最初线程任务为 std::function<void()>，但获取不到任务执行结果，
- *        后通过继承调整了任务类型(ThreadTask)，是否有更优的方法解决。
+ * @ps      最初版本中线程任务为 std::function<void()>，但获取不到任务执行
+ *        结果，后通过继承调整了任务类型(ThreadTask)，是否有更优的方法解决？
+ *        性能略微有所下降
  */
 class Thread : noncopyable
 {
@@ -144,3 +146,5 @@ using ThreadSPtr = std::shared_ptr<Thread>;
 using ThreadWPtr = std::weak_ptr<Thread>;
 
 BASE_END_NAMESPACE
+
+#endif

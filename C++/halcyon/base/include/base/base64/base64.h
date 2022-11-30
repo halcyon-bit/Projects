@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_BASE64_H
+#define BASE_BASE64_H
 
 #include <base/common/noncopyable.h>
 
@@ -32,3 +33,5 @@ public:
 };
 
 BASE_END_NAMESPACE
+
+#endif

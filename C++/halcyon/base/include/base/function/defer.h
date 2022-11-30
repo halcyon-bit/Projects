@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_DEFER_H
+#define BASE_DEFER_H
 
 #include <base/common/noncopyable.h>
 
@@ -77,3 +78,5 @@ _DeferredAction _DeferredActionCtor(T&& p)
 }
 
 BASE_END_NAMESPACE
+
+#endif

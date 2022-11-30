@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_DEFINE_H
+#define BASE_DEFINE_H
 
 #include <base/common/platform.h>
 
@@ -34,4 +35,6 @@
 
 #if defined USE_CPP11 || defined USE_CPP14
 #define USE_HALCYON_STRING_VIEW
+#endif
+
 #endif

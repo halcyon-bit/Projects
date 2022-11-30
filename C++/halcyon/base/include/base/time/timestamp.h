@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_TIMESTAMP_H
+#define BASE_TIMESTAMP_H
 
 #include <base/common/base_define.h>
 
@@ -173,3 +174,5 @@ inline double timeDifference(Timestamp high, Timestamp low)
 }
 
 BASE_END_NAMESPACE
+
+#endif

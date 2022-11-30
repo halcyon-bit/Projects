@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_SINGLETON_H
+#define BASE_SINGLETON_H
 
 #include <base/common/noncopyable.h>
 
@@ -82,3 +83,5 @@ template<typename T>
 T* Singleton<T>::value_ = nullptr;
 
 BASE_END_NAMESPACE
+
+#endif

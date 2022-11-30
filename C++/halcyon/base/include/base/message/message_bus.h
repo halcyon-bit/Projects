@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_MESSAGE_BUS_H
+#define BASE_MESSAGE_BUS_H
 
 #include <base/thread/thread.h>
 
@@ -17,7 +18,10 @@ BASE_BEGIN_NAMESPACE
 
 #pragma warning(disable: 4477)
 
-///  消息总线(包括同步、异步调用)
+/**
+ * @brief   消息总线(包括同步、异步调用)
+ * @ps      最初只支持同步调用，后学到异步的支持(挺好，收纳)
+ */
 template<typename T = uint32_t>
 class MessageBus : noncopyable
 {
@@ -304,3 +308,5 @@ private:  /// 事务数据
 #pragma warning(default: 4477)
 
 BASE_END_NAMESPACE
+
+#endif

@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef BASE_COUNT_DOWN_LATCH_H
+#define BASE_COUNT_DOWN_LATCH_H
 
 #include <base/common/noncopyable.h>
 
@@ -81,3 +82,5 @@ private:
 };
 
 BASE_END_NAMESPACE
+
+#endif
