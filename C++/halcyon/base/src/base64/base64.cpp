@@ -1,13 +1,13 @@
 ﻿#include <base/base64/base64.h>
 
-using namespace halcyon::base;
-
 BASE_BEGIN_NAMESPACE
 
 static const std::string kBase64Table{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" };
 static constexpr char kBase64Pad_{ '=' };
 
 BASE_END_NAMESPACE
+
+using namespace halcyon::base;
 
 std::string Base64::encode(const uint8_t* str, int32_t length)
 {
