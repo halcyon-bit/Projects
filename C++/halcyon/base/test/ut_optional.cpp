@@ -48,13 +48,13 @@ public:
         data_ = new char[100];
     }
 
-    TestMove(TestMove&& rhs)
+    TestMove(TestMove&& rhs) noexcept
     {
         data_ = rhs.data_;
         rhs.data_ = nullptr;
         rhs.valid_ = false;
     }
-    TestMove& operator=(TestMove&& rhs)
+    TestMove& operator=(TestMove&& rhs) noexcept
     {
         if (&rhs != this) {
             data_ = rhs.data_;
@@ -85,6 +85,7 @@ public:
 
 TEST(OptionalTest, constructor)
 {
+    // int
     {
         base::Optional<int> op1;
         EXPECT_EQ(op1.isInit(), false);
@@ -124,8 +125,17 @@ TEST(OptionalTest, constructor)
         EXPECT_EQ(op9.isInit(), true);
         EXPECT_EQ(op6.isInit(), false);
         EXPECT_EQ(*op9, n);
+
+        op7 = 100;
+        EXPECT_EQ(op7.isInit(), true);
+        EXPECT_EQ(*op7, 100);
+
+        op8 = n;
+        EXPECT_EQ(op8.isInit(), true);
+        EXPECT_EQ(*op8, n);
     }
 
+    // std::string
     {
         base::Optional<std::string> op1;
         EXPECT_EQ(op1.isInit(), false);
@@ -139,39 +149,51 @@ TEST(OptionalTest, constructor)
         EXPECT_EQ(op3.isInit(), true);
         EXPECT_EQ(*op3, s);
 
-        base::Optional<std::string> op4(op1);
-        EXPECT_EQ(op4.isInit(), false);
+        std::string t = s;
+        base::Optional<std::string> op4(std::move(t));
+        EXPECT_EQ(op4.isInit(), true);
+        EXPECT_EQ(t.empty(), true);
+        EXPECT_EQ(*op4, s);
 
-        base::Optional<std::string> op5(op2);
-        EXPECT_EQ(op5.isInit(), true);
-        EXPECT_EQ((*op5).compare("world"), 0);
+        base::Optional<std::string> op5(op1);
+        EXPECT_EQ(op5.isInit(), false);
 
-        base::Optional<std::string> op6(std::move(op3));
-        EXPECT_EQ(op3.isInit(), false);
+        base::Optional<std::string> op6(op2);
         EXPECT_EQ(op6.isInit(), true);
-        EXPECT_EQ(*op6, s);
+        EXPECT_EQ((*op6).compare("world"), 0);
 
-        base::Optional<std::string> op7;
-        op7 = op4;
-        EXPECT_EQ(op7.isInit(), false);
+        base::Optional<std::string> op7(std::move(op3));
+        EXPECT_EQ(op3.isInit(), false);
+        EXPECT_EQ(op7.isInit(), true);
+        EXPECT_EQ(*op7, s);
 
         base::Optional<std::string> op8;
         op8 = op5;
-        EXPECT_EQ(op8.isInit(), true);
-        EXPECT_EQ((*op8).compare("world"), 0);
+        EXPECT_EQ(op8.isInit(), false);
 
         base::Optional<std::string> op9;
-        op9 = std::move(op6);
+        op9 = op6;
         EXPECT_EQ(op9.isInit(), true);
-        EXPECT_EQ(op6.isInit(), false);
+        EXPECT_EQ((*op9).compare("world"), 0);
+
+        base::Optional<std::string> op10;
+        op10 = std::move(op7);
+        EXPECT_EQ(op10.isInit(), true);
+        EXPECT_EQ(op7.isInit(), false);
+        EXPECT_EQ(*op10, s);
+
+        op9 = "hello";
+        EXPECT_EQ(op9.isInit(), true);
         EXPECT_EQ(*op9, s);
 
-        base::Optional<std::string> op10(std::move(s));
+        t = s;
+        op10 = std::move(t);
         EXPECT_EQ(op10.isInit(), true);
-        EXPECT_EQ(s.empty(), true);
-        EXPECT_EQ(*op10, *op9);
+        EXPECT_EQ(t.empty(), true);
+        EXPECT_EQ(*op10, s);
     }
 
+    // TestA
     {
         base::Optional<TestA> op1;
         EXPECT_EQ(op1.isInit(), false);
@@ -207,6 +229,10 @@ TEST(OptionalTest, constructor)
         EXPECT_EQ(op9.isInit(), true);
         EXPECT_EQ(op6.isInit(), false);
         EXPECT_EQ(*op9, *op5);
+
+        op7 = t;
+        EXPECT_EQ(op7.isInit(), true);
+        EXPECT_EQ(*op7, *op5);
     }
 
     {

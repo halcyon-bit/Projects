@@ -76,6 +76,19 @@ public:  // 构造函数
         return *this;
     }
 
+    Optional& operator=(const T& val)
+    {
+        destroy();  // 销毁自身
+        create(val);
+        return *this;
+    }
+    Optional& operator=(T&& val)
+    {
+        destroy();  // 销毁自身
+        create(std::forward<T>(val));
+        return *this;
+    }
+
 public:
     /**
      * @brief   是否初始化 
