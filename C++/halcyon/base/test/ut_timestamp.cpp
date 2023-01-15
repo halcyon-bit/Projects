@@ -6,7 +6,6 @@
 #include <condition_variable>
 
 using namespace halcyon;
-using std::chrono::seconds;
 
 int main(int argc, char* argv[])
 {

@@ -1,4 +1,4 @@
-#ifndef BASE_OPTIONAL_H
+ï»¿#ifndef BASE_OPTIONAL_H
 #define BASE_OPTIONAL_H
 
 #include <base/utility/type.h>  // std::aligned_storage_t
@@ -8,16 +8,16 @@
 BASE_BEGIN_NAMESPACE
 
 /**
- * @brief   Optional ¹ÜÀíÒ»¸öÖµ£¬¼È¿ÉÒÔ´æÔÚÒ²¿ÉÒÔ²»´æÔÚµÄÖµ£¬Ö»ÓĞµ± Optional
- *      ±»³õÊ¼»¯Ö®ºó£¬Õâ¸ö Optional ²ÅÊÇÓĞĞ§µÄ¡£
+ * @brief   Optional ç®¡ç†ä¸€ä¸ªå€¼ï¼Œæ—¢å¯ä»¥å­˜åœ¨ä¹Ÿå¯ä»¥ä¸å­˜åœ¨çš„å€¼ï¼Œåªæœ‰å½“ Optional
+ *      è¢«åˆå§‹åŒ–ä¹‹åï¼Œè¿™ä¸ª Optional æ‰æ˜¯æœ‰æ•ˆçš„ã€‚
  *
- * @ps      C++17 ÖĞÒÑÓĞ std::optional ÀàĞÍ
+ * @ps      C++17 ä¸­å·²æœ‰ std::optional ç±»å‹
  */
 template<typename T>
 class Optional
 {
     using value_type = std::aligned_storage_t<sizeof(T), std::alignment_of<T>::value>;
-public:  // ¹¹Ôìº¯Êı
+public:  // æ„é€ å‡½æ•°
     Optional()
     {}
 
@@ -56,7 +56,7 @@ public:  // ¹¹Ôìº¯Êı
         if (this == &rhs) {
             return *this;
         }
-        destroy();  // Ïú»Ù×ÔÉí
+        destroy();  // é”€æ¯è‡ªèº«
         if (rhs.isInit()) {
             copy(rhs.data_);
         }
@@ -68,7 +68,7 @@ public:  // ¹¹Ôìº¯Êı
         if (this == &rhs) {
             return *this;
         }
-        destroy();  // Ïú»Ù×ÔÉí
+        destroy();  // é”€æ¯è‡ªèº«
         if (rhs.isInit()) {
             move(std::move(rhs.data_));
             rhs.destroy();
@@ -78,20 +78,20 @@ public:  // ¹¹Ôìº¯Êı
 
     Optional& operator=(const T& val)
     {
-        destroy();  // Ïú»Ù×ÔÉí
+        destroy();  // é”€æ¯è‡ªèº«
         create(val);
         return *this;
     }
     Optional& operator=(T&& val)
     {
-        destroy();  // Ïú»Ù×ÔÉí
+        destroy();  // é”€æ¯è‡ªèº«
         create(std::forward<T>(val));
         return *this;
     }
 
 public:
     /**
-     * @brief   ÊÇ·ñ³õÊ¼»¯ 
+     * @brief   æ˜¯å¦åˆå§‹åŒ– 
      */
     bool isInit() const
     {
@@ -170,7 +170,7 @@ private:
     }
 
 private:
-    //! ÊÇ·ñ³õÊ¼»¯
+    //! æ˜¯å¦åˆå§‹åŒ–
     bool init_{ false };
     value_type data_;
 };
