@@ -109,7 +109,7 @@ public:
             // 类型不符
             throw std::bad_cast();
         }
-        auto derived = dynamic_cast<Derived<U>*>(ptr_.get());
+        auto derived = static_cast<Derived<U>*>(ptr_.get());
         return derived->value_;
     }
 
