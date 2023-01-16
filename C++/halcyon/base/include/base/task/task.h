@@ -119,10 +119,18 @@ public:
     }
 
     /**
+     * @brief       等待任务结束
+     * @param[in]   超时时间(ms)
+     * @return      是否成功，timeout 为 0，会阻塞直到任务执行完成；
+     *            非0，则 timeout 时间内没有结果返回失败。
+     */
+    virtual bool wait(uint64_t timeout = 0) = 0;
+
+    /**
      * @brief       获取任务结果
      * @param[out]  任务结果
      * @param[in]   超时时间(ms)
-     * @return      是否成功，timeout 为 0，会阻塞知道任务执行完成；
+     * @return      是否成功，timeout 为 0，会阻塞直到任务执行完成；
      *            非0，则 timeout 时间内没有结果返回失败。
      * @ps          是否可以不用 any 实现？
      */

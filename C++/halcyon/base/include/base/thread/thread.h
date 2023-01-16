@@ -84,16 +84,6 @@ public:
     }
 
     /**
-     * @brief   设置退出信号
-     */
-    //void quit()
-    //{
-    //    bool expected = true;
-    //    if (started_.compare_exchange_strong(expected, false))
-    //        queue_.put(nullptr);
-    //}
-
-    /**
      * @brief   是否启动
      */
     bool started()
@@ -107,17 +97,10 @@ public:
     void join()
     {
         bool expected = true;
-        if (started_.compare_exchange_strong(expected, false))
+        if (started_.compare_exchange_strong(expected, false)) {
             queue_.put(nullptr);
-        thd_.join();
-    }
-
-    /**
-     * @brief   分离线程，分离后不可 join
-     */
-    void detach()
-    {
-        thd_.detach();
+            thd_.join();
+        }
     }
 
 private:

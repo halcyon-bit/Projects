@@ -20,6 +20,32 @@ public:
     ~ThreadTask() = default;
 
 public:
+    /**
+     * @brief       等待任务结束
+     * @param[in]   超时时间(ms)
+     * @return      是否成功，timeout 为 0，会阻塞直到任务执行完成；
+     *            非0，则 timeout 时间内没有结果返回失败。
+     */
+    bool wait(uint64_t timeout = 0) override
+    {
+        if (timeout == 0) {
+            result_.wait();
+            return true;
+        }
+        else {
+            std::chrono::milliseconds span(timeout);
+            return result_.wait_for(span) == std::future_status::timeout;
+        }
+    }
+
+    /**
+     * @brief       获取任务结果
+     * @param[out]  任务结果
+     * @param[in]   超时时间(ms)
+     * @return      是否成功，timeout 为 0，会阻塞直到任务执行完成；
+     *            非0，则 timeout 时间内没有结果返回失败。
+     * @ps          是否可以不用 any 实现？
+     */
 #if defined USE_CPP11 || defined USE_CPP14
     bool result(Any& value, uint64_t timeout = 0) override
 #else
@@ -28,7 +54,6 @@ public:
     {
         if (timeout == 0) {
             resultAux(value, std::is_same<T, void>());
-            //value = result_.get();
             return true;
         }
         std::chrono::milliseconds span(timeout);
@@ -36,18 +61,22 @@ public:
             return false;
         else {
             resultAux(value, std::is_same<T, void>());
-            //value = result_.get();
             return true;
         }
     }
 
 private:
+    /**
+     * @brief   处理返回值为 void 类型的情况
+     */
 #if defined USE_CPP11 || defined USE_CPP14
     void resultAux(Any& value, std::true_type)
 #else
     void resultAux(std::any& value, std::true_type)
 #endif
-    {}
+    {
+        result_.wait();
+    }
 
 #if defined USE_CPP11 || defined USE_CPP14
     void resultAux(Any& value, std::false_type)
