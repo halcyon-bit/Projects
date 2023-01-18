@@ -110,12 +110,12 @@ public:
             return;
         {
             std::lock_guard<std::mutex> locker(mutex_);
-            if ((status_ != emCancelled) || (status_ != emFinished)) {
+            if ((status_ != emCancelled) && (status_ != emFinished)) {
                 callback_ = call;
                 return;
             }
         }
-        callback_(this);
+        call(this);
     }
 
     /**
