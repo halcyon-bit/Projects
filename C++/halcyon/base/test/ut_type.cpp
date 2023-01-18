@@ -23,9 +23,7 @@ int main()
     std::cout << std::endl << std::endl;
     // 获取整数序列中最大值
     TestA<int, double> t;
-
     std::cout << "<int, double> max size: " << t.type_size << std::endl;
-
     std::cout << "<1, 2, 3, 10, 20, 4, 2, 5, 99> max value: " << halcyon::base::integer_max<1, 2, 3, 10, 20, 4, 2, 5, 99>::value << std::endl;
 
     return 0;
