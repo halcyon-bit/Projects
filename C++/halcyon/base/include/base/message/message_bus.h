@@ -20,7 +20,7 @@ BASE_BEGIN_NAMESPACE
 
 /**
  * @brief   消息总线(包括同步、异步调用)
- * @ps      最初只支持同步调用，后学到异步的支持(挺好，收纳)
+ * @ps      待优化，异步支持线程池，同步支持线程
  */
 template<typename T = uint32_t>
 class MessageBus : noncopyable
