@@ -47,13 +47,13 @@ public:
         data_ = new char[100];
     }
 
-    TestMove(TestMove&& rhs)
+    TestMove(TestMove&& rhs) noexcept
     {
         data_ = rhs.data_;
         rhs.data_ = nullptr;
         rhs.valid_ = false;
     }
-    TestMove& operator=(TestMove&& rhs)
+    TestMove& operator=(TestMove&& rhs) noexcept
     {
         if (&rhs != this) {
             data_ = rhs.data_;
@@ -129,18 +129,28 @@ TEST(VariantTest, constructor)
         EXPECT_EQ(var3.get<TestA>().f, 10.10);
         EXPECT_EQ(var3.get<TestA>().s, std::string("hello"));
 
-        base::Variant<TestA, std::string> var6(var3);
-        EXPECT_EQ(var6.is<TestA>(), true);
-        EXPECT_EQ(var6.get<TestA>().n, 10);
-        EXPECT_EQ(var6.get<TestA>().f, 10.10);
-        EXPECT_EQ(var6.get<TestA>().s, std::string("hello"));
+        base::Variant<TestA, std::string> var4(var3);
+        EXPECT_EQ(var4.is<TestA>(), true);
+        EXPECT_EQ(var4.get<TestA>().n, 10);
+        EXPECT_EQ(var4.get<TestA>().f, 10.10);
+        EXPECT_EQ(var4.get<TestA>().s, std::string("hello"));
 
-        base::Variant<TestA, std::string> var7(std::move(var6));
-        EXPECT_EQ(var7.is<TestA>(), true);
-        EXPECT_EQ(var7.get<TestA>().n, 10);
-        EXPECT_EQ(var7.get<TestA>().f, 10.10);
-        EXPECT_EQ(var7.get<TestA>().s, std::string("hello"));
-        EXPECT_EQ(var6.is<void>(), true);
+        base::Variant<TestA, std::string> var5(std::move(var4));
+        EXPECT_EQ(var5.is<TestA>(), true);
+        EXPECT_EQ(var5.get<TestA>().n, 10);
+        EXPECT_EQ(var5.get<TestA>().f, 10.10);
+        EXPECT_EQ(var5.get<TestA>().s, std::string("hello"));
+        EXPECT_EQ(var4.is<void>(), true);
+    }
+    {
+        base::Variant<int, std::string> var1 = "sawefbc";
+        EXPECT_EQ(var1.is<std::string>(), true);
+
+        var1 = 1123;
+        EXPECT_EQ(var1.is<int>(), true);
+
+        var1 = "hello";
+        EXPECT_EQ(var1.is<std::string>(), true);
     }
 }
 

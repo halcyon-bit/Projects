@@ -1,5 +1,4 @@
-﻿#include <base/utility/type.h>
-#include <base/utility/utility.h>  // std::exchange
+﻿#include <base/utility/utility.h>  // std::exchange
 
 #include <memory>
 #include <stdexcept>

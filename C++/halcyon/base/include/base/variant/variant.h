@@ -2,7 +2,6 @@
 #define BASE_VARIANT_H
 
 #include <base/utility/type.h>
-#include <base/utility/utility.h>
 
 #include <typeindex>
 
@@ -15,18 +14,24 @@ namespace detail
     struct max_align : std::integral_constant<int, integer_max<std::alignment_of<T>::value...>::value>
     {};
 
+
     /// 是否包含某种类型(Rest 中是否有 T)(可以转换也行)
     template<typename T, typename... Rest>
-    struct contains;
+    struct is_contains;
 
     template<typename T, typename U, typename... Rest>
-    struct contains<T, U, Rest...> 
-        : std::conditional<std::is_same<T, U>::value, std::true_type, contains<T, Rest...>>::type
-    {};
+    struct is_contains<T, U, Rest...>
+        : std::conditional<std::is_same<T, U>::value || std::is_constructible<U, T>::value, std::true_type, is_contains<T, Rest...>>::type
+    {
+        using type = typename std::conditional<std::is_same<T, U>::value || std::is_constructible<U, T>::value, U, typename is_contains<T, Rest...>::type>::type;
+    };
 
     template<typename T>
-    struct contains<T> : std::false_type
-    {};
+    struct is_contains<T> : std::false_type
+    {
+        using type = void;
+    };
+
 
     /// 通过类型获取索引
     template<typename T, typename... Rest>
@@ -44,6 +49,7 @@ namespace detail
     template<typename T>
     struct index_of<T> : std::integral_constant<int32_t, -1>
     {};
+
 
     /// 获取指定位置的类型
     template<size_t index, typename... T>
@@ -64,8 +70,6 @@ namespace detail
 
 /**
  * @brief   类似于 union，可以定义多种类型，允许赋不同类型的值。
- *        待优化：构造时需要指定类型，无法支持隐式类型转换
- *        e.g. Variant<int, std::string> var2("123");  // error
  * 
  * @ps      C++17 std::variant
  */
@@ -92,7 +96,7 @@ public:
         copy(rhs.type_, &rhs.data_, &data_);
     }
 
-    Variant(Variant&& rhs)
+    Variant(Variant&& rhs) noexcept
         : type_(rhs.type_)
     {
         move(rhs.type_, &rhs.data_, &data_);
@@ -110,7 +114,7 @@ public:
         return *this;
     }
 
-    Variant& operator=(Variant&& rhs)
+    Variant& operator=(Variant&& rhs) noexcept
     {
         if (&rhs != this) {
             destroy(type_, &data_);
@@ -127,22 +131,22 @@ public:
     }
 
 public:
-    template<typename U, typename = std::enable_if_t<detail::contains<std::decay_t<U>, T...>::value>>
+    template<typename U, typename = std::enable_if_t<detail::is_contains<std::decay_t<U>, T...>::value>>
     Variant(U&& value)
         : type_(std::type_index(typeid(void)))
     {
-        using type = std::decay_t<U>;
+        using type = typename detail::is_contains<std::decay_t<U>, T...>::type;
         new(&data_) type(std::forward<U>(value));
-        type_ = std::type_index(typeid(U));
+        type_ = std::type_index(typeid(type));
     }
 
-    template<typename U, typename = std::enable_if_t<detail::contains<std::decay_t<U>, T...>::value>>
+    template<typename U, typename = std::enable_if_t<detail::is_contains<std::decay_t<U>, T...>::value>>
     Variant& operator=(U&& value)
     {
         destroy(type_, &data_);
-        using type = std::decay_t<U>;
+        using type = typename detail::is_contains<std::decay_t<U>, T...>::type;
         new(&data_) type(std::forward<U>(value));
-        type_ = std::type_index(typeid(U));
+        type_ = std::type_index(typeid(type));
         return *this;
     }
 

@@ -111,9 +111,6 @@
     <ClInclude Include="..\..\include\base\utility\utility.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\base\utility\lazy.h">
-      <Filter>utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\base\variant\variant.h">
       <Filter>variant</Filter>
     </ClInclude>
@@ -134,6 +131,12 @@
     </ClInclude>
     <ClInclude Include="..\..\include\base\thread\thread.h">
       <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\utility\coding.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\utility\bind.h">
+      <Filter>utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

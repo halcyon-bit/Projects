@@ -7,7 +7,9 @@
 #include <assert.h>
 #endif
 
+#include <tuple>
 #include <iterator>
+#include <functional>
 #include <type_traits>
 
 #ifdef USE_CPP11
@@ -28,6 +30,33 @@ namespace std
 
     template<typename T>
     using result_of_t = typename result_of<T>::type;
+
+    template<typename T>
+    using remove_reference_t = typename remove_reference<T>::type;
+
+    template<typename T>
+    using remove_pointer_t = typename remove_pointer<T>::type;
+
+
+    // C++14 有 index_sequence
+    // 编译时的整数序列
+    template<size_t... Indexes>
+    struct index_sequence
+    {};
+
+    // 创建一个编译时的整数序列 [0, ..., N-1]
+    template<size_t N, size_t... Indexes>
+    struct make_index_sequence : make_index_sequence<N - 1, N - 1, Indexes...>
+    {};
+
+    template<size_t... Indexes>
+    struct make_index_sequence<0, Indexes...>
+    {
+        using type = index_sequence<Indexes...>;
+    };
+
+    template<size_t N>
+    using make_index_sequence_t = typename make_index_sequence<N>::type;
 }
 #endif
 
@@ -41,6 +70,11 @@ namespace std
 #endif
 
 BASE_BEGIN_NAMESPACE
+
+#ifndef USE_CPP11
+template<size_t N>
+using make_index_sequence_t = std::make_index_sequence<N>;
+#endif
 
 // Taken from google-protobuf stubs/common.h
 //
@@ -192,7 +226,102 @@ inline To horrible_cast(const From input)
 
 
 
-/// 迭代器判断
+/////////////////////////////// 函数萃取 ///////////////////////////////
+// 获取函数的实际类型、返回类型、参数个数和参数的具体类型
+template<typename T>
+struct function_traits;
+
+/// 普通函数
+template<typename R, typename... Args>
+struct function_traits<R(Args...)>
+{
+    // 参数个数
+    enum
+    {
+        arity = sizeof...(Args)
+    };
+    using return_type = R;  // 返回类型
+    using function_type = R(Args...);  // 函数类型
+    using function_pointer = R(*)(Args...);
+
+    // 参数类型
+    template<size_t I>
+    struct args
+    {
+        static_assert(I < arity, "index is out of range");
+        using type = typename std::tuple_element<I, std::tuple<Args...>>::type;
+    };
+
+    template<size_t I>
+    using arg_type = typename args<I>::type;
+};
+
+/// 函数指针
+template<typename R, typename... Args>
+struct function_traits<R(*)(Args...)> : function_traits<R(Args...)>
+{};
+
+/// 函数对象
+template<typename Callable>
+struct function_traits : function_traits<decltype(&Callable::operator())>
+{};
+
+/// member function
+template<typename R, typename C, typename... Args>
+struct function_traits<R(C::*)(Args...)> : function_traits<R(Args...)>
+{};
+
+/// member function const
+template<typename R, typename C, typename... Args>
+struct function_traits<R(C::*)(Args...) const> : function_traits<R(Args...)>
+{};
+
+/// member function volatile
+template<typename R, typename C, typename... Args>
+struct function_traits<R(C::*)(Args...) volatile> : function_traits<R(Args...)>
+{};
+
+/// member function const volatile
+template<typename R, typename C, typename... Args>
+struct function_traits<R(C::*)(Args...) const volatile> : function_traits<R(Args...)>
+{};
+
+/// std::function
+template<typename R, typename... Args>
+struct function_traits<std::function<R(Args...)>> : function_traits<R(Args...)>
+{};
+
+
+
+/////////////////////////////// make_reverse_index_sequence ///////////////////////////////
+// 创建一个编译时的整数序列 [N-1, ..., 0]
+template<size_t N, size_t... Indexes>
+struct make_reverse_index_sequence : make_reverse_index_sequence<N - 1, Indexes..., N - 1>
+{};
+
+template<size_t... Indexes>
+struct make_reverse_index_sequence<0, Indexes...>
+{
+    using type = std::index_sequence<Indexes...>;
+};
+
+template<size_t N>
+using make_reverse_index_sequence_t = typename make_reverse_index_sequence<N>::type;
+
+
+
+///////////////////////////////  ///////////////////////////////
+template<typename T>
+struct is_pointer_noref : std::is_pointer<std::remove_reference_t<T>>
+{};
+
+template<typename T>
+struct is_memfunc_noref : std::is_member_function_pointer<std::remove_reference_t<T>>
+{};
+
+
+
+/////////////////////////////// 迭代器判断 ///////////////////////////////
 template<typename Iter>
 using iter_cate = typename std::iterator_traits<Iter>::iterator_category;
 
@@ -206,7 +335,7 @@ struct is_iterator<T, std::void_t<iter_cate<T>>> : std::true_type
 
 
 
-/// 获取整数序列中最大值
+/////////////////////////////// 获取整数序列中最大值 ///////////////////////////////
 template<size_t arg, size_t... rest>
 struct integer_max;
 
