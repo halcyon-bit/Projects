@@ -1,4 +1,4 @@
-﻿#include <base/base64/base64.h>
+﻿#include "base/base64/base64.h"
 
 BASE_BEGIN_NAMESPACE
 
@@ -28,8 +28,7 @@ std::string Base64::encode(const uint8_t* str, int32_t length)
         if (length % 3 == 1) {
             result += kBase64Table[(current[0] & 0x03) << 4];
             result += "==";
-        }
-        else if (length % 3 == 2) {
+        } else if (length % 3 == 2) {
             result += kBase64Table[((current[0] & 0x03) << 4) + (current[1] >> 4)];
             result += kBase64Table[(current[1] & 0x0f) << 2];
             result += "=";

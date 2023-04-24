@@ -12,8 +12,8 @@
 #include <functional>
 #include <type_traits>
 
-#ifdef USE_CPP11
 // C++14
+#ifdef USE_CPP11
 namespace std
 {
     template<typename T>
@@ -36,32 +36,11 @@ namespace std
 
     template<typename T>
     using remove_pointer_t = typename remove_pointer<T>::type;
-
-
-    // C++14 有 index_sequence
-    // 编译时的整数序列
-    template<size_t... Indexes>
-    struct index_sequence
-    {};
-
-    // 创建一个编译时的整数序列 [0, ..., N-1]
-    template<size_t N, size_t... Indexes>
-    struct make_index_sequence : make_index_sequence<N - 1, N - 1, Indexes...>
-    {};
-
-    template<size_t... Indexes>
-    struct make_index_sequence<0, Indexes...>
-    {
-        using type = index_sequence<Indexes...>;
-    };
-
-    template<size_t N>
-    using make_index_sequence_t = typename make_index_sequence<N>::type;
 }
 #endif
 
-#if defined USE_CPP11 || defined USE_CPP14
 // C++17 
+#if defined USE_CPP11 || defined USE_CPP14
 namespace std
 {
     template <typename... T>
@@ -71,11 +50,7 @@ namespace std
 
 BASE_BEGIN_NAMESPACE
 
-#ifndef USE_CPP11
-template<size_t N>
-using make_index_sequence_t = std::make_index_sequence<N>;
-#endif
-
+////////////////////////////////////////// type_convert //////////////////////////////////////////
 // Taken from google-protobuf stubs/common.h
 //
 // Protocol Buffers - Google's data interchange format
@@ -226,7 +201,63 @@ inline To horrible_cast(const From input)
 
 
 
-/////////////////////////////// 函数萃取 ///////////////////////////////
+////////////////////////////////////////// index_sequence //////////////////////////////////////////
+#ifdef USE_HALCYON_INDEX_SEQUENCE
+// C++14 有 index_sequence
+// 编译时的整数序列
+template<size_t... Indexes>
+struct index_sequence
+{};
+
+// 创建一个编译时的整数序列 [0, ..., N-1]
+template<size_t N, size_t... Indexes>
+struct _make_index_sequence : _make_index_sequence<N - 1, N - 1, Indexes...>
+{};
+
+template<size_t... Indexes>
+struct _make_index_sequence<0, Indexes...>
+{
+    using type = index_sequence<Indexes...>;
+};
+
+template<size_t N>
+using make_index_sequence = typename _make_index_sequence<N>::type;
+
+// make_reverse_index_sequence
+// 创建一个编译时的整数序列 [N-1, ..., 0]
+template<size_t N, size_t... Indexes>
+struct _make_reverse_index_sequence : _make_reverse_index_sequence<N - 1, Indexes..., N - 1>
+{};
+
+template<size_t... Indexes>
+struct _make_reverse_index_sequence<0, Indexes...>
+{
+    using type = index_sequence<Indexes...>;
+};
+
+template<size_t N>
+using make_reverse_index_sequence = typename _make_reverse_index_sequence<N>::type;
+
+#else
+// make_reverse_index_sequence
+// 创建一个编译时的整数序列 [N-1, ..., 0]
+template<size_t N, size_t... Indexes>
+struct _make_reverse_index_sequence : _make_reverse_index_sequence<N - 1, Indexes..., N - 1>
+{};
+
+template<size_t... Indexes>
+struct _make_reverse_index_sequence<0, Indexes...>
+{
+    using type = std::index_sequence<Indexes...>;
+};
+
+template<size_t N>
+using make_reverse_index_sequence = typename _make_reverse_index_sequence<N>::type;
+#endif
+
+
+
+////////////////////////////////////////// 函数萃取 //////////////////////////////////////////
 // 获取函数的实际类型、返回类型、参数个数和参数的具体类型
 template<typename T>
 struct function_traits;
@@ -293,24 +324,7 @@ struct function_traits<std::function<R(Args...)>> : function_traits<R(Args...)>
 
 
 
-/////////////////////////////// make_reverse_index_sequence ///////////////////////////////
-// 创建一个编译时的整数序列 [N-1, ..., 0]
-template<size_t N, size_t... Indexes>
-struct make_reverse_index_sequence : make_reverse_index_sequence<N - 1, Indexes..., N - 1>
-{};
-
-template<size_t... Indexes>
-struct make_reverse_index_sequence<0, Indexes...>
-{
-    using type = std::index_sequence<Indexes...>;
-};
-
-template<size_t N>
-using make_reverse_index_sequence_t = typename make_reverse_index_sequence<N>::type;
-
-
-
-///////////////////////////////  ///////////////////////////////
+////////////////////////////////////////// type //////////////////////////////////////////
 template<typename T>
 struct is_pointer_noref : std::is_pointer<std::remove_reference_t<T>>
 {};

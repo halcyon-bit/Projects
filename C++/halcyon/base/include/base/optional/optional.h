@@ -51,6 +51,7 @@ public:  // 构造函数
         destroy();
     }
 
+    // 赋值操作符
     Optional& operator=(const Optional& rhs)
     {
         if (this == &rhs) {
@@ -98,6 +99,9 @@ public:
         return init_;
     }
 
+    /**
+     * @brief   构造 
+     */
     template<typename... Args>
     void emplace(Args&&... args)
     {
@@ -106,12 +110,14 @@ public:
     }
 
 public:
+    /**
+     * @brief   获取数据，若未初始化，则抛出异常 
+     */
     T& operator*()
     {
         if (isInit()) {
             return *((T*)(&data_));
-        }
-        else {
+        } else {
             throw std::logic_error("Optional not initialized");
         }
     }
@@ -120,8 +126,7 @@ public:
     {
         if (isInit()) {
             return *((T*)(&data_));
-        }
-        else {
+        } else {
             throw std::logic_error("Optional not initialized");
         }
     }
@@ -136,6 +141,9 @@ public:
     }
 
 public:
+    /**
+     * @brief   是否初始化 
+     */
     operator bool() const
     {
         return init_;
@@ -172,6 +180,7 @@ private:
 private:
     //! 是否初始化
     bool init_{ false };
+    //! 数据
     value_type data_;
 };
 

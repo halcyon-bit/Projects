@@ -30,11 +30,35 @@
 // use string in halcyon::base replace std::string
 //#define USE_HALCYON_STRING
 
-// use string_view in halcyon::base replace std::string_view
+// use string_view in halcyon::base replace std::string_view (c++17)
 //#define USE_HALCYON_STRING_VIEW
+
+// use any in halcyon::base replace std::any (c++17)
+// #define USE_HALCYON_ANY
+
+// use index_sequence in halcyon::base replace std::index_sequence (c++14)
+// #define USE_HALCYON_INDEX_SEQUENCE
+
+// use invoke in halcyon::base replace std::invoke (c++17)
+// use apply in halcyon::base replace std::apply (c++17)
+// #define USE_HALCYON_INVOKE
+// #define USE_HALCYON_APPLY
 
 #if defined USE_CPP11 || defined USE_CPP14
 #define USE_HALCYON_STRING_VIEW
+#endif
+
+#if defined USE_CPP11 || defined USE_CPP14
+#define USE_HALCYON_ANY
+#endif
+
+#ifdef USE_CPP11
+#define USE_HALCYON_INDEX_SEQUENCE
+#endif
+
+#if defined USE_CPP11 || defined USE_CPP14
+#define USE_HALCYON_INVOKE
+#define USE_HALCYON_APPLY
 #endif
 
 #endif

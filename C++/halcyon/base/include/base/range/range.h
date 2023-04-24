@@ -74,8 +74,7 @@ private:
         // 检测参数
         if (step_ > 0 && begin_ >= end_) {
             throw std::logic_error("end must greater than begin.");
-        }
-        else if (step_ < 0 && begin_ <= end_) {
+        } else if (step_ < 0 && begin_ <= end_) {
             throw std::logic_error("end must less than begin.");
         }
 

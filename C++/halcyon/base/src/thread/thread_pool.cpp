@@ -80,18 +80,24 @@ private:
     void threadProc();
 
 private:
-    std::list<std::thread> threads_;  //! 所有的任务线程
+    //! 所有的任务线程
+    std::list<std::thread> threads_;
 
     // 这里并没有用 BlockingQueue, 是因为其多线程退出不好处理
-    std::mutex mutex_;  //! 任务队列锁
-    std::queue<TaskSPtr> tasks_;  //! 任务队列
-    std::condition_variable cv_;  //! 任务队列条件变量
+    std::mutex mutex_;
+    //! 任务队列
+    std::queue<TaskSPtr> tasks_;
+    std::condition_variable cv_;
 
-    std::atomic<size_t> waiting_threads_{ 0 };  //! 处于等待状态的线程
+    //! 处于等待状态的线程
+    std::atomic<size_t> waiting_threads_{ 0 };
 
-    std::atomic<bool> shutdown_{ false };  //! 中止线程池(等待剩余任务运行完成)
-    std::atomic<bool> shutdown_now_{ false };  //! 中止线程池(放弃任务的运行)
-    bool started_{ false };  //! 是否启动
+    //! 中止线程池(等待剩余任务运行完成)
+    std::atomic<bool> shutdown_{ false };
+    //! 中止线程池(放弃任务的运行)
+    std::atomic<bool> shutdown_now_{ false };
+    //! 是否启动
+    bool started_{ false };
 };
 
 BASE_END_NAMESPACE

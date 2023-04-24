@@ -4,7 +4,6 @@
 #include <base/task/task.h>
 
 #include <future>
-#include <functional>
 
 BASE_BEGIN_NAMESPACE
 
@@ -31,8 +30,7 @@ public:
         if (timeout == 0) {
             result_.wait();
             return true;
-        }
-        else {
+        } else {
             std::chrono::milliseconds span(timeout);
             return result_.wait_for(span) == std::future_status::timeout;
         }
@@ -46,7 +44,7 @@ public:
      *            非0，则 timeout 时间内没有结果返回失败。
      * @ps          是否可以不用 any 实现？
      */
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
     bool result(Any& value, uint64_t timeout = 0) override
 #else
     bool result(std::any& value, uint64_t timeout = 0) override
@@ -57,9 +55,9 @@ public:
             return true;
         }
         std::chrono::milliseconds span(timeout);
-        if (result_.wait_for(span) == std::future_status::timeout)
+        if (result_.wait_for(span) == std::future_status::timeout) {
             return false;
-        else {
+        } else {
             resultAux(value, std::is_same<T, void>());
             return true;
         }
@@ -69,7 +67,7 @@ private:
     /**
      * @brief   处理返回值为 void 类型的情况
      */
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
     void resultAux(Any& value, std::true_type)
 #else
     void resultAux(std::any& value, std::true_type)
@@ -78,7 +76,7 @@ private:
         result_.wait();
     }
 
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
     void resultAux(Any& value, std::false_type)
 #else
     void resultAux(std::any& value, std::false_type)
@@ -101,8 +99,10 @@ private:
     }
 
 private:
-    std::function<void()> func_;  //! 任务函数
-    std::future<T> result_;  //! 任务结果
+    //! 任务函数
+    std::function<void()> func_;
+    //! 任务结果
+    std::future<T> result_;
 };
 
 BASE_END_NAMESPACE

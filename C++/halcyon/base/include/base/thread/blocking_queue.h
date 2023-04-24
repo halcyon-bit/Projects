@@ -73,8 +73,7 @@ public:
             data = std::move(queue_.front());
             queue_.pop_front();
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }

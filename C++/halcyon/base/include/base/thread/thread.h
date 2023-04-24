@@ -1,7 +1,6 @@
 ﻿#ifndef BASE_THREAD_H
 #define BASE_THREAD_H
 
-#include <base/utility/type.h>
 #include <base/thread/thread_task.h>
 #include <base/thread/blocking_queue.h>
 
@@ -16,7 +15,7 @@ BASE_BEGIN_NAMESPACE
  *        结果，后通过继承调整了任务类型(ThreadTask)，是否有更优的方法解决？
  *        性能略微有所下降
  */
-class Thread : noncopyable
+class Thread final : noncopyable
 {
 public:
     // using Task = std::function<void()>;  //! 任务函数
@@ -48,7 +47,7 @@ public:
      * @return      任务对象，失败返回 nullptr(例如线程已经停止)
      */
     template<typename F, typename... Args>
-    TaskSPtr run(F&& func, Args&&... args)
+    TaskSPtr push(F&& func, Args&&... args)
     {
         if (!started_.load(std::memory_order_acquire)) {
             return nullptr;
@@ -73,7 +72,7 @@ public:
     }
 
     // 针对 nullptr 
-    void run(std::nullptr_t) = delete;
+    void push(std::nullptr_t) = delete;
 
     /**
      * @brief   判断线程是否可以 join
@@ -120,9 +119,12 @@ private:
     }
 
 private:
-    std::thread thd_;  //! 线程
-    BlockingQueue<TaskSPtr> queue_;  //! 任务队列
-    std::atomic_bool started_;  //! 是否启动
+    //! 线程
+    std::thread thd_;
+    //! 任务队列
+    BlockingQueue<TaskSPtr> queue_;
+    //! 是否启动
+    std::atomic_bool started_;
 };
 
 using ThreadSPtr = std::shared_ptr<Thread>;

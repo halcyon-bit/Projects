@@ -15,7 +15,7 @@
 BASE_BEGIN_NAMESPACE
 
 /// MD5
-class HALCYON_BASE_API MD5 : noncopyable
+class HALCYON_BASE_API MD5 final : noncopyable
 {
 public:
     MD5() noexcept;

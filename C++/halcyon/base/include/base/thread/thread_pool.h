@@ -11,7 +11,7 @@ BASE_BEGIN_NAMESPACE
 class ThreadPoolImpl;
 
 /// 线程池(调整任务类型为 ThreadTask)
-class HALCYON_BASE_API ThreadPool : noncopyable
+class HALCYON_BASE_API ThreadPool final : noncopyable
 {
 public:
     /**
@@ -48,7 +48,7 @@ public:
      * @return      任务对象，失败返回 nullptr(例如线程池已经停止)
      */
     template <typename F, typename... Args>
-    TaskSPtr addTask(F&& func, Args&&... args)
+    TaskSPtr push(F&& func, Args&&... args)
     {
 #if defined USE_CPP11 || defined USE_CPP14
         using return_type = std::result_of_t<F(Args...)>;
@@ -64,6 +64,9 @@ public:
 
         return addTask(result);
     }
+
+    // 针对 nullptr 
+    void push(std::nullptr_t) = delete;
 
     /**
      * @brief   停止线程池，还没有执行的任务会继续执行

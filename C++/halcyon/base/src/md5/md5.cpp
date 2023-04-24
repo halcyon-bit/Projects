@@ -178,8 +178,7 @@ void MD5::update(const uint8_t* input, size_t length)
             transform(&input[i]);
         }
         index = 0;
-    }
-    else {
+    } else {
         i = 0;
     }
 

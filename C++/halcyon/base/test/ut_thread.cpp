@@ -2,7 +2,6 @@
 #include "base/time/timestamp.h"
 
 #include "gtest/gtest.h"
-#include "vld/vld.h"
 #include <ctime>
 #include <iostream>
 
@@ -85,7 +84,7 @@ struct TestY
 void result_recv(base::Task* task)
 {
     EXPECT_EQ(task->cancelled(), false);
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
     base::Any sum;
     task->result(sum, 5000);
     std::cout << "test4 result: " << sum.anyCast<int>() << std::endl;
@@ -105,18 +104,18 @@ TEST(ThreadTest, constructor)
     EXPECT_EQ(true, thd.started());
 }
 
-TEST(ThreadTest, run)
+TEST(ThreadTest, push)
 {
     base::Thread thd;
     // 类成员函数
     TestX x;
-    thd.run(&TestX::testc, &x);
-    thd.run(&TestX::test, &x);
+    thd.push(&TestX::testc, &x);
+    thd.push(&TestX::test, &x);
 
     {
         // 全局函数
-        auto result = thd.run(&test1);
-#if defined USE_CPP11 || defined USE_CPP14
+        auto result = thd.push(&test1);
+#ifdef USE_HALCYON_ANY
         base::Any sum;
         result->result(sum, 5000);
         std::cout << "test1 result: " << sum.anyCast<int64_t>() << std::endl;
@@ -130,35 +129,35 @@ TEST(ThreadTest, run)
     }
     // std::bind
     auto func2 = std::bind(&test2, 10, "hello");
-    thd.run(std::move(func2));
+    thd.push(std::move(func2));
 
-    thd.run(&test2, 1000, "world");
+    thd.push(&test2, 1000, "world");
 
     // 仿函数
     TestY y;
-    thd.run(y, 100.0, "C++");
+    thd.push(y, 100.0, "C++");
 
     // std::function
     std::function<void()> funcv;
-    thd.run(funcv);
+    thd.push(funcv);
 
     funcv = std::bind(&test1);
-    thd.run(funcv);
+    thd.push(funcv);
 
-    //thd.run(nullptr);   // nullptr_t
+    //thd.push(nullptr);   // nullptr_t
 
     // lambda
     auto lambda_func = []() {
         std::cout << "lambda_1\n";
     };
-    thd.run(lambda_func);
+    thd.push(lambda_func);
 
-    thd.run([]() {
+    thd.push([]() {
         std::cout << "lambda_2: sleep(1s)\n";
         base::sleep(1000);
     });
 
-    thd.run([](int a, int b) {
+    thd.push([](int a, int b) {
         std::cout << "lambda_3(int, int): ";
         std::cout << a << " " << b << std::endl;
     }, 1, 3);
@@ -166,12 +165,12 @@ TEST(ThreadTest, run)
     // 回调
     {
         std::vector<int> vec{ 0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1 };
-        auto result = thd.run(&test4, vec);
+        auto result = thd.push(&test4, vec);
         result->setDoneCallback(std::bind(&result_recv, std::placeholders::_1));
     }
     {
         std::vector<int> vec{ 0, 1, 0, 2, 1, 0, 1, 3, 2, 1, 2, 1 };
-        auto result = thd.run(&test4, vec);
+        auto result = thd.push(&test4, vec);
         result->cancel();
         base::sleep(1000);
         EXPECT_EQ(result->cancelled(), true);

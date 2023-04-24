@@ -17,7 +17,7 @@ BASE_BEGIN_NAMESPACE
  *
  * @ps      C++17 中已有 std::any 类型
  */
-class Any
+class Any final
 {
 public:
     Any()
@@ -148,8 +148,7 @@ private:
     {
         if (ptr_ != nullptr) {
             return ptr_->clone();
-        }
-        else {
+        } else {
             return nullptr;
         }
     }

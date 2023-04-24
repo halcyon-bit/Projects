@@ -349,8 +349,7 @@ public:  /// 查找 find_last_of
         }
         if (pos >= size_) {
             pos = 0;
-        }
-        else {
+        } else {
             pos = size_ - pos - 1;
         }
         const_reverse_iterator iter = std::find_first_of(crbegin() + pos, crend(), s.cbegin(), s.cend(), traits_type::eq);

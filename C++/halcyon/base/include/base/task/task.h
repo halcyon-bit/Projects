@@ -1,10 +1,10 @@
 ﻿#ifndef BASE_TASK_H
 #define BASE_TASK_H
 
-#if defined USE_CPP11 || defined USE_CPP14
+#include <base/common/base_define.h>
+#ifdef USE_HALCYON_ANY
 #include <base/any/any.h>
 #else
-#include <base/common/base_define.h>
 #include <any>
 #endif
 #include <mutex>
@@ -134,7 +134,7 @@ public:
      *            非0，则 timeout 时间内没有结果返回失败。
      * @ps          是否可以不用 any 实现？
      */
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
     virtual bool result(Any& value, uint64_t timeout = 0) = 0;
 #else
     virtual bool result(std::any& value, uint64_t timeout = 0) = 0;
@@ -174,9 +174,11 @@ private:
     virtual void run() = 0;
 
 protected:
-    callback_t callback_{ &defaultCallback };  //! 任务执行完成后的回调函数
+    //! 任务执行完成后的回调函数
+    callback_t callback_{ &defaultCallback };
 
-    Status status_{ emPending };  //! 任务状态
+    //! 任务状态
+    Status status_{ emPending };
     mutable std::mutex mutex_;
 };
 

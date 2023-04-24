@@ -36,7 +36,7 @@
 
 /// C++ 标准判断
 #if defined WINDOWS && defined _MSC_VER
-#if _MSVC_LANG >= 202002L
+#if _MSVC_LANG >= 202002L  // c++20
 #define USE_CPP20
 #elif _MSVC_LANG >= 201703L  // C++17
 #define USE_CPP17
@@ -48,7 +48,7 @@
 #error "should use c++11 implementation"
 #endif
 #else
-#if __cplusplus >= 202002L
+#if __cplusplus >= 202002L  // c++20
 #define USE_CPP20
 #elif __cplusplus >= 201703L  // C++17
 #define USE_CPP17
