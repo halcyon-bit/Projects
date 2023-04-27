@@ -1,4 +1,5 @@
-﻿#include "base/utility/type.h"
+﻿#define USE_HALCYON_INDEX_SEQUENCE
+#include "base/utility/type.h"
 
 #include <string>
 #include <iostream>
@@ -62,12 +63,9 @@ struct TestC
 int main()
 {
     std::cout << "======================= test index_sequence" << std::endl;
-#ifdef USE_HALCYON_INDEX_SEQUENCE
+
     std::cout << base::type_name<base::make_index_sequence<10>()>() << std::endl;
     std::cout << base::type_name<base::make_reverse_index_sequence<10>()>() << std::endl;
-#else
-    std::cout << base::type_name<base::make_reverse_index_sequence<10>()>() << std::endl;
-#endif
 
     // 迭代器判断
     std::cout << std::endl << std::endl;

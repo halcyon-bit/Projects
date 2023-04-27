@@ -57,8 +57,7 @@
 #endif
 
 #if defined USE_CPP11 || defined USE_CPP14
-#define USE_HALCYON_INVOKE
-#define USE_HALCYON_APPLY
+#define USE_HALCYON_INVOKE_APPLY
 #endif
 
 #endif

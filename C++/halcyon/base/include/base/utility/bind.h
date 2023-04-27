@@ -4,7 +4,7 @@
 #include <base/utility/utility.h>
 
 // 模拟 std::bind
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_INVOKE_APPLY
 
 BASE_BEGIN_NAMESPACE
 
@@ -22,7 +22,7 @@ inline auto select(T&& val, Tuple&) -> T&&
 }
 
 template<size_t I, typename Tuple>
-inline auto select(Placeholder<I>&, Tuple& t) -> decltype(std::get<I - 1>(t))
+inline auto select(Placeholder<I>, Tuple& t) -> decltype(std::get<I - 1>(t))
 {
     return std::get<I - 1>(t);
 }
@@ -36,12 +36,6 @@ class Bind_t
 
 public:
     template<typename F1, typename... Args1>
-    Bind_t(F1& f, Args1&... args)
-        : func_(f)
-        , args_(args...)
-    {}
-
-    template<typename F1, typename... Args1>
     Bind_t(F1&& f, Args1&&... args)
         : func_(std::forward<F1>(f))
         , args_(std::forward<Args1>(args)...)
@@ -50,13 +44,13 @@ public:
     template<typename... Args1>
     return_type operator()(Args1&&... args)
     {
-        return do_call(make_index_sequence_t<std::tuple_size<arg_type>::value>(),
+        return do_call(HALCYON_INDEX_NS make_index_sequence<std::tuple_size<arg_type>::value>(),
             std::forward_as_tuple(std::forward<Args1>(args)...));
     }
 
 private:
     template<typename Tuple, size_t... Indexes>
-    return_type do_call(const std::index_sequence<Indexes...>&, Tuple&& args)
+    return_type do_call(HALCYON_INDEX_NS index_sequence<Indexes...>, Tuple&& args)
     {
         return base::invoke(func_, select(std::get<Indexes>(args_), args)...);
     }
@@ -69,18 +63,11 @@ private:
 template<typename F, typename... Args>
 inline Bind_t<F, Args...> bind(F&& f, Args&&... args)
 {
-    using type = typename function_traits<F>::return_type;
     return Bind_t<F, Args...>(std::forward<F>(f), std::forward<Args>(args)...);
-}
-
-template<typename F, typename... Args>
-inline Bind_t<F, Args...> bind(F& f, Args&... args)
-{
-    return Bind_t<F, Args...>(f, args...);
 }
 
 BASE_END_NAMESPACE
 
-#endif
+#endif  // USE_HALCYON_INVOKE_APPLY
 
-#endif
+#endif  // BASE_BIND_H

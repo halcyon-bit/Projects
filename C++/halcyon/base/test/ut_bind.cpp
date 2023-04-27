@@ -1,12 +1,11 @@
+#define USE_HALCYON_INVOKE_APPLY
 #include "base/utility/bind.h"
 
 #include "gtest/gtest.h"
 
 #include <string>
 #include <iostream>
-
-#if defined USE_CPP11 || defined USE_CPP14
-
+#include <functional>
 using namespace halcyon;
 
 void test1()
@@ -91,8 +90,6 @@ TEST(Bind, test)
         EXPECT_EQ(ret, "hello world");
     }
 }
-
-#endif
 
 int main(int argc, char* argv[])
 {

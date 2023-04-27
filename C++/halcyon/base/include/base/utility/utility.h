@@ -6,6 +6,12 @@
 #include <utility>
 #include <stdexcept>
 
+#ifdef USE_HALCYON_INDEX_SEQUENCE
+#define HALCYON_INDEX_NS   base::
+#else
+#define HALCYON_INDEX_NS   std::
+#endif
+
 #ifdef USE_CPP11
 // C++11 以上会有的功能
 namespace std
@@ -19,12 +25,13 @@ namespace std
         return oldVal;
     }
 }
-#endif
+#endif  // USE_CPP11
+
 
 BASE_BEGIN_NAMESPACE
-/////////////////////////////// invoke ///////////////////////////////
+////////////////////////////////////////// invoke //////////////////////////////////////////
 // C++17 有 invoke
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_INVOKE_APPLY
 template<typename F, typename... Args>
 inline std::enable_if_t<is_pointer_noref<F>::value, typename function_traits<std::decay_t<F>>::return_type> invoke(F&& f, Args&&... args)
 {
@@ -44,27 +51,27 @@ inline std::enable_if_t<is_memfunc_noref<F>::value && is_pointer_noref<C>::value
 }
 
 template<typename F, typename C, typename... Args>
-inline std::enable_if_t<is_memfunc_noref<F>::value && !is_pointer_noref<C>::value, typename function_traits<std::decay_t<F>>::return_type> invoke(F&& f, C&& obj, Args... args)
+inline std::enable_if_t<is_memfunc_noref<F>::value && !is_pointer_noref<C>::value, typename function_traits<std::decay_t<F>>::return_type> invoke(F&& f, C&& obj, Args&&... args)
 {
     return (std::forward<C>(obj).*std::forward<F>(f))(std::forward<Args>(args)...);
 }
-#endif
+#endif  // USE_HALCYON_INVOKE_APPLY
 
 
-/////////////////////////////// tuple helper ///////////////////////////////
+////////////////////////////////////////// tuple helper //////////////////////////////////////////
 
-/////////////////////////////// std::tuple 根据元素值获取索引位置
+////////////////////////////////////////// std::tuple 根据元素值获取索引位置
 // find_tuple_index
 namespace detail
 {
     template<size_t N, typename Tuple, typename T>
-    static typename std::enable_if<std::is_same<std::tuple_element_t<N, Tuple>, T>::value, bool>::type
+    static std::enable_if_t<std::is_same<std::tuple_element_t<N, Tuple>, T>::value, bool>
         compare(const Tuple& t, const T& v)
     {
         return std::get<N>(t) == v;
     }
     template<size_t N, typename Tuple, typename T>
-    static typename std::enable_if<!std::is_same<std::tuple_element_t<N, Tuple>, T>::value, bool>::type
+    static std::enable_if_t<!std::is_same<std::tuple_element_t<N, Tuple>, T>::value, bool>
         compare(const Tuple& t, const T& v)
     {
         return false;
@@ -75,8 +82,8 @@ namespace detail
     {
         static int find(const std::tuple<Args...>& t, T&& val)
         {
-            using U = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
-            using V = typename std::tuple_element<I - 1, std::tuple<Args...>>::type;
+            using U = std::remove_reference_t<std::remove_cv_t<T>>;
+            using V = std::tuple_element_t<I - 1, std::tuple<Args...>>;
             return (std::is_same<U, V>::value && compare<I - 1>(t, val)) ? I - 1
                 : find_tuple_index_helper<I - 1, T, Args...>::find(t, std::forward<T>(val));
         }
@@ -87,8 +94,8 @@ namespace detail
     {
         static int find(const std::tuple<Args...>& t, T&& val)
         {
-            using U = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
-            using V = typename std::tuple_element<0, std::tuple<Args...>>::type;
+            using U = std::remove_reference_t<std::remove_cv_t<T>>;
+            using V = std::tuple_element_t<0, std::tuple<Args...>>;
             return (std::is_convertible<U, V>::value && compare<0>(t, val)) ? 0 : -1;
         }
     };
@@ -107,28 +114,18 @@ constexpr int find_tuple_index(const std::tuple<Args...>& t, T&& val)
 }
 
 
-/////////////////////////////// 遍历 tuple
+////////////////////////////////////////// 遍历 std::tuple
 // tuple_for_each
 namespace detail
 {
-    template<typename F, size_t... Indexes, typename... Args>
-    constexpr void for_each_helper(F&& f, std::index_sequence<Indexes...>, const std::tuple<Args...>& t)
+    template<typename F, size_t... Indexes, typename Tuple>
+    constexpr void for_each_helper(F&& f, HALCYON_INDEX_NS index_sequence<Indexes...>, Tuple&& t)
     {
 #if defined USE_CPP11 || defined USE_CPP14
-        int _[] = { (f(std::get<Indexes>(t)), 0)... };  // 逗号运算符，解包
+        int _[] = { (f(std::get<Indexes>(std::forward<Tuple>(t))), 0)... };  // 逗号运算符，解包
 #else
-        (f(std::get<Indexes>(t)), ...);  // C++17 折叠表达式
-#endif
-    }
-
-    template<typename F, size_t... Indexes, typename... Args>
-    constexpr void for_each_helper(F&& f, std::index_sequence<Indexes...>, std::tuple<Args...>& t)
-    {
-#if defined USE_CPP11 || defined USE_CPP14
-        int _[] = { (f(std::get<Indexes>(t)), 0)... };  // 逗号运算符，解包
-#else
-        (f(std::get<Indexes>(t)), ...);  // C++17 折叠表达式
-#endif
+        (f(std::get<Indexes>(std::forward<Tuple>(t))), ...);  // C++17 折叠表达式
+#endif  // USE_CPP11 || USE_CPP14
     }
 }
 
@@ -137,27 +134,30 @@ namespace detail
  * @param[in]   函数，用于处理 tuple 内的每一个值，仅接受一个参数
  * @param[in]   tuple
  */
-template<typename F, typename... Args>
-constexpr typename std::enable_if_t<(sizeof...(Args) > 0)> tuple_for_each(F&& f, const std::tuple<Args...>& t)
+template<typename F, typename Tuple>
+constexpr std::enable_if_t<std::tuple_size<std::remove_reference_t<Tuple>>::value != 0>
+    tuple_for_each(F&& f, Tuple&& t)
 {
-    detail::for_each_helper(std::forward<F>(f), make_index_sequence_t<sizeof...(Args)>(), t);
+    detail::for_each_helper(std::forward<F>(f),
+        HALCYON_INDEX_NS make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>(),
+        t);
 }
-template<typename F, typename... Args>
-constexpr typename std::enable_if_t<(sizeof...(Args) > 0)> tuple_for_each(F&& f, std::tuple<Args...>& t)
-{
-    detail::for_each_helper(std::forward<F>(f), make_index_sequence_t<sizeof...(Args)>(), t);
-}
-template<typename F, typename... Args>
-constexpr typename std::enable_if_t<(sizeof...(Args) == 0)> tuple_for_each(F&& f, const std::tuple<Args...>& t)
+template<typename F, typename Tuple>
+constexpr std::enable_if_t<std::tuple_size<std::remove_reference_t<Tuple>>::value == 0>
+    tuple_for_each(F&& f, Tuple&& t)
 {}
 
 
-/////////////////////////////// 反转 std::tuple
+////////////////////////////////////////// 反转 std::tuple
 // reverse_tuple
 namespace detail
 {
     template<typename... Args, size_t... Indexes>
-    auto reverse_tuple_impl(const std::tuple<Args...>& t, std::index_sequence<Indexes...>&&) -> decltype(std::make_tuple(std::get<Indexes>((t))...))
+#ifdef USE_CPP11
+    auto reverse_tuple_impl(const std::tuple<Args...>& t, base::index_sequence<Indexes...>) -> decltype(std::make_tuple(std::get<Indexes>((t))...))
+#else
+    decltype(auto) reverse_tuple_impl(const std::tuple<Args...>& t, HALCYON_INDEX_NS index_sequence<Indexes...>)
+#endif  // USE_CPP11
     {
         return std::make_tuple(std::get<Indexes>((t))...);
     }
@@ -169,23 +169,28 @@ namespace detail
  * @return      反转后的 tuple
  */
 template<typename... Args>
-auto reverse_tuple(const std::tuple<Args...>& t) -> decltype(detail::reverse_tuple_impl((t), make_reverse_index_sequence_t<sizeof...(Args)>()))
+#ifdef USE_CPP11
+auto reverse_tuple(const std::tuple<Args...>& t) -> decltype(detail::reverse_tuple_impl((t), make_reverse_index_sequence<sizeof...(Args)>()))
+#else
+decltype(auto) reverse_tuple(const std::tuple<Args...>& t)
+#endif  // USE_CPP11
 {
-    return detail::reverse_tuple_impl(t, make_reverse_index_sequence_t<sizeof...(Args)>());
+    return detail::reverse_tuple_impl(t, make_reverse_index_sequence<sizeof...(Args)>());
 }
 
 
-/////////////////////////////// std::tuple 应用于函数，C++17 有该函数
-// apply
-#if defined USE_CPP11 || defined USE_CPP14
+/////////////////////////////// std::tuple 应用于函数
+// C++17 有 apply
+#ifdef USE_HALCYON_INVOKE_APPLY
+
 namespace detail
 {
     template<typename F, typename Tuple, size_t... Indexes>
 #ifdef USE_CPP11
-    auto apply_helper(F&& f, Tuple&& t, index_sequence<Indexes...>) -> decltype(std::forward<F>(f)(std::get<Indexes>(std::forward<Tuple>(t))...))
+    typename function_traits<std::decay_t<F>>::return_type apply_helper(F&& f, Tuple&& t, base::index_sequence<Indexes...>)
 #else
-    decltype(auto) apply_helper(F&& f, Tuple&& t, std::index_sequence<Indexes...>)
-#endif
+    decltype(auto) apply_helper(F&& f, Tuple&& t, HALCYON_INDEX_NS index_sequence<Indexes...>)
+#endif  // USE_CPP11
     {
         return base::invoke(std::forward<F>(f), std::get<Indexes>(std::forward<Tuple>(t))...);
     }
@@ -199,45 +204,57 @@ namespace detail
  */
 template<typename F, typename Tuple>
 #ifdef USE_CPP11
-auto apply(F&& f, Tuple&& t) -> decltype(detail::apply_helper((f), (t), base::make_index_sequence<std::tuple_size<typename std::remove_reference<Tuple>::type>::value>::type()))
+typename function_traits<std::decay_t<F>>::return_type apply(F&& f, Tuple&& t)
 #else
 decltype(auto) apply(F&& f, Tuple&& t)
-#endif
+#endif  // USE_CPP11
 {
     return detail::apply_helper(std::forward<F>(f), std::forward<Tuple>(t), 
-        make_index_sequence_t<std::tuple_size<std::remove_reference_t<Tuple>>::value>());
+        HALCYON_INDEX_NS make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>());
 }
-#endif
+
+#endif  // USE_HALCYON_INVOKE_APPLY
 
 
 /////////////////////////////// 合并 tuple
-template<size_t N, typename T1, typename T2>
-using pair_type = std::pair<typename std::tuple_element<N, T1>::type, typename std::tuple_element<N, T2>::type>;
-
-template<size_t N, typename T1, typename T2>
-pair_type<N, T1, T2> pair(const T1& t1, const T2& t2)
+namespace detail
 {
-    return std::make_pair(std::get<N>(t1), std::get<N>(t2));
-}
+    template<size_t N, typename Tuple1, typename Tuple2>
+    using pair_type = std::pair<std::tuple_element_t<N, Tuple1>, std::tuple_element_t<N, Tuple2>>;
 
-template<size_t... Indexes, typename T1, typename T2>
-auto pairs_helper(std::index_sequence<Indexes...>, const T1& t1, const T2& t2) -> decltype(std::make_tuple(pair<Indexes>(t1, t2)...))
-{
-    return std::make_tuple(pair<Indexes>(t1, t2)...);
+    template<size_t N, typename Tuple1, typename Tuple2>
+    pair_type<N, Tuple1, Tuple2> pair(const Tuple1& t1, const Tuple2& t2)
+    {
+        return std::make_pair(std::get<N>(t1), std::get<N>(t2));
+    }
+
+    template<size_t... Indexes, typename Tuple1, typename Tuple2>
+#ifdef USE_CPP11
+    auto pairs_helper(base::index_sequence<Indexes...>, const Tuple1& t1, const Tuple2& t2) -> decltype(std::make_tuple(detail::pair<Indexes>(t1, t2)...))
+#else
+    decltype(auto) pairs_helper(HALCYON_INDEX_NS index_sequence<Indexes...>, const Tuple1& t1, const Tuple2& t2)
+#endif  // USE_CPP11
+    {
+        return std::make_tuple(detail::pair<Indexes>(t1, t2)...);
+    }
 }
 
 template<typename... Args1, typename... Args2>
-auto zip(const std::tuple<Args1...>& t1, const std::tuple<Args2...>& t2) -> decltype(pairs_helper(make_index_sequence_t<sizeof...(Args1)>(), t1, t2))
+#ifdef USE_CPP11
+auto zip(const std::tuple<Args1...>& t1, const std::tuple<Args2...>& t2) -> decltype(detail::pairs_helper(base::make_index_sequence<sizeof...(Args1)>(), t1, t2))
+#else
+decltype(auto) zip(const std::tuple<Args1...>& t1, const std::tuple<Args2...>& t2)
+#endif  // USE_CPP11
 {
     static_assert(sizeof...(Args1) == sizeof...(Args2), "tuples should be the same size.");
-    return pairs_helper(make_index_sequence_t<sizeof...(Args1)>(), t1, t2);
+    return detail::pairs_helper(HALCYON_INDEX_NS make_index_sequence<sizeof...(Args1)>(), t1, t2);
 }
 
 BASE_END_NAMESPACE
 
 
 #ifdef _BASE_TEST_
-
+ 
 #include <string>
 #include <memory>
 
@@ -262,6 +279,6 @@ std::string type_name()
 
 BASE_END_NAMESPACE
 
-#endif
+#endif  // _BASE_TEST_
 
-#endif
+#endif  // BASE_UTILITY_H

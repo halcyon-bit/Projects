@@ -36,6 +36,12 @@ namespace std
 
     template<typename T>
     using remove_pointer_t = typename remove_pointer<T>::type;
+
+    template<typename T>
+    using remove_cv_t = typename remove_cv<T>::type;
+
+    template<std::size_t I, typename T>
+    using tuple_element_t = typename tuple_element<I, T>::type;
 }
 #endif
 
@@ -151,7 +157,7 @@ inline To down_cast(From* f)                     // so we only accept pointers
         implicit_cast<From*, To>(0);
     }
 
-#if !defined(NDEBUG) && !defined(GOOGLE_PROTOBUF_NO_RTTI)
+#if !defined(NDEBUG)
     assert(f == nullptr || dynamic_cast<To>(f) != nullptr);  // RTTI: debug mode only!
 #endif
     return static_cast<To>(f);
