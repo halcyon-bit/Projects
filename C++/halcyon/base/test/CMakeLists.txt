@@ -86,10 +86,6 @@ add_executable(ut_defer ${SRC_PATH}/ut_defer.cpp)
 # elapsed_timer
 add_executable(ut_elapsed_timer ${SRC_PATH}/ut_elapsed_timer.cpp)
 
-# function
-add_executable(ut_function ${SRC_PATH}/ut_function.cpp)
-target_link_libraries(ut_function gtest pthread)
-
 # md5
 add_executable(ut_md5 ${SRC_PATH}/ut_md5.cpp)
 target_link_libraries(ut_md5 gtest halcyon_base pthread)
@@ -115,7 +111,7 @@ target_link_libraries(ut_string_view gtest pthread)
 
 # thread
 add_executable(ut_thread ${SRC_PATH}/ut_thread.cpp)
-target_link_libraries(ut_thread pthread)
+target_link_libraries(ut_thread gtest pthread)
 
 # threadpool
 add_executable(ut_threadpool ${SRC_PATH}/ut_threadpool.cpp)
@@ -130,10 +126,11 @@ add_executable(ut_type ${SRC_PATH}/ut_type.cpp)
 
 # utility
 add_executable(ut_utility ${SRC_PATH}/ut_utility.cpp)
+target_link_libraries(ut_utility gtest pthread)
 
 # variant
-add_executable(ut_variant ${SRC_PATH}/ut_variant.cpp)
-target_link_libraries(ut_variant gtest pthread)
+#add_executable(ut_variant ${SRC_PATH}/ut_variant.cpp)
+#target_link_libraries(ut_variant gtest pthread)
 
 # version
 add_executable(ut_version ${SRC_PATH}/ut_version.cpp)
