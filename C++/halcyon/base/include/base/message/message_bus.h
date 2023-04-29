@@ -1,12 +1,13 @@
 ﻿#ifndef BASE_MESSAGE_BUS_H
 #define BASE_MESSAGE_BUS_H
 
-#include <base/thread/thread.h>
-#if defined USE_CPP11 || defined USE_CPP14
+#include <base/common/base_define.h>
+#ifdef USE_HALCYON_ANY
 #include <base/any/any.h>
 #else
 #include <any>
 #endif
+#include <base/thread/thread.h>
 
 #include <unordered_map>
 
@@ -16,7 +17,9 @@
 
 BASE_BEGIN_NAMESPACE
 
+#ifdef WINDOWS
 #pragma warning(disable: 4477)
+#endif
 
 /**
  * @brief   消息总线(包括同步、异步调用)
@@ -31,7 +34,7 @@ public:
 private:  /// 通知数据
     struct NotifyValue
     {
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
         Any func;  //! 函数
 #else
         std::any func;  //! 函数
@@ -230,12 +233,12 @@ public:  /// 通知相关接口(异步)，注意：通知一般是一对多的
                 // 无处理线程
                 continue;
             }
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
             auto func = value.func.anyCast<notify_func_t>();
 #else
             auto func = std::any_cast<notify_func_t>(value.func);
 #endif
-            thd->run(std::bind(std::move(func), std::forward<Args>(args)...));
+            thd->push(std::bind(std::move(func), std::forward<Args>(args)...));
         }
     }
 
@@ -355,7 +358,7 @@ public:  /// 事务相关调用(同步)，注意：事务是一对一的
             std::lock_guard<std::mutex> lock(affair_mutex_);
             auto iter = affair_.find(msgKey);
             assert(iter != affair_.end());
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
             // 使用 gcc 编译有问题?
             // func = iter->second.anyCast<function_type>();
             Any& any = iter->second;
@@ -409,14 +412,16 @@ private:  /// 通知数据
 
 private:  /// 事务数据
     mutable std::mutex affair_mutex_;  //! for affair_
-#if defined USE_CPP11 || defined USE_CPP14
+#ifdef USE_HALCYON_ANY
     std::unordered_map<MessageKey, Any> affair_;  //! 事务表
 #else
     std::unordered_map<MessageKey, std::any> affair_;  //! 事务表
 #endif
 };
 
+#ifdef WINDOWS
 #pragma warning(default: 4477)
+#endif
 
 BASE_END_NAMESPACE
 

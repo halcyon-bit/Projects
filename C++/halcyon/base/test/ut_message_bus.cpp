@@ -65,8 +65,7 @@ public:
             for (j = 1; j <= i; j++) {
                 if (i == j || j == 1) {
                     a[i][j] = 1;
-                }
-                else {
+                } else {
                     a[i][j] = a[i - 1][j] + a[i - 1][j - 1];
                 }
                 info.append(" ").append(std::to_string(a[i][j]));
