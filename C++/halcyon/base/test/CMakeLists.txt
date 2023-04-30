@@ -129,8 +129,8 @@ add_executable(ut_utility ${SRC_PATH}/ut_utility.cpp)
 target_link_libraries(ut_utility gtest pthread)
 
 # variant
-#add_executable(ut_variant ${SRC_PATH}/ut_variant.cpp)
-#target_link_libraries(ut_variant gtest pthread)
+add_executable(ut_variant ${SRC_PATH}/ut_variant.cpp)
+target_link_libraries(ut_variant gtest pthread)
 
 # version
 add_executable(ut_version ${SRC_PATH}/ut_version.cpp)

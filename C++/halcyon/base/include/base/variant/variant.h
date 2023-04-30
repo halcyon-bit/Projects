@@ -1,7 +1,7 @@
 ﻿#ifndef BASE_VARIANT_H
 #define BASE_VARIANT_H
 
-#include <base/utility/type.h>
+#include <base/utility/utility.h>
 
 #include <typeindex>
 
@@ -15,15 +15,17 @@ namespace detail
     {};
 
 
-    /// 是否包含某种类型(Rest 中是否有 T)(可以转换也行)
+    /// 是否包含某种类型(Rest 中是否有 T)(可以转换也行(非基本类型))
     template<typename T, typename... Rest>
     struct is_contains;
 
     template<typename T, typename U, typename... Rest>
     struct is_contains<T, U, Rest...>
-        : std::conditional<std::is_same<T, U>::value || std::is_constructible<U, T>::value, std::true_type, is_contains<T, Rest...>>::type
+        : std::conditional<std::is_same<T, U>::value  // 相同类型
+            || ((!std::is_arithmetic<T>::value && !std::is_arithmetic<U>::value) && std::is_constructible<U, T>::value), std::true_type, is_contains<T, Rest...>>::type
     {
-        using type = typename std::conditional<std::is_same<T, U>::value || std::is_constructible<U, T>::value, U, typename is_contains<T, Rest...>::type>::type;
+        using type = typename std::conditional<std::is_same<T, U>::value
+            || ((!std::is_arithmetic<T>::value && !std::is_arithmetic<U>::value) && std::is_constructible<U, T>::value), U, typename is_contains<T, Rest...>::type>::type;
     };
 
     template<typename T>
@@ -76,6 +78,8 @@ namespace detail
 template<typename... T>
 class Variant
 {
+    static_assert(sizeof...(T) > 0, "no template arguments!");
+
     static const size_t kDataSize = integer_max<sizeof(T)...>::value;
     static const size_t kAlignSize = detail::max_align<T...>::value;
     using value_type = std::aligned_storage_t<kDataSize, kAlignSize>;
@@ -185,7 +189,7 @@ public:
 
     /**
      * @brief   获取 Variant 中存储的数据
-     * @ps      类型不同，则抛异常
+     * @ps      类型不存在，则抛异常
      */
     template<typename U>
     std::decay_t<U>& get()
