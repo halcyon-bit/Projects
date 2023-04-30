@@ -20,7 +20,7 @@ inline void defaultCallback(Task*)
 /**
  * @brief   任务基类
  * @ps      可以异步获取任务结果，又需要擦除结果类型，方便将任务
- *        塞进队列，创建了基类... 参考py 
+ *        塞进队列，创建了基类... 参考py
  *        是否有其他更好的方法？任务结果在子类中。
  */
 class Task
@@ -50,7 +50,7 @@ public:
         std::lock_guard<std::mutex> locker(mutex_);
         return status_;
     }
-    
+
     /**
      * @brief   取消任务
      * @return  是否成功
@@ -70,7 +70,7 @@ public:
         callback_(this);
         return true;
     }
-    
+
     /**
      * @brief   任务是否取消
      * @return  是否取消
@@ -80,7 +80,7 @@ public:
         std::lock_guard<std::mutex> locker(mutex_);
         return status_ == emCancelled;
     }
-    
+
     /**
      * @brief   任务是否正在运行
      */

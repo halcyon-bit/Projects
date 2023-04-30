@@ -55,7 +55,7 @@ public:
         thd_->join();
     }
 
-    int32_t pascalTriangle(int32_t n) const 
+    int32_t pascalTriangle(int32_t n) const
     {
         std::string info;
         int32_t a[35][35];
@@ -65,7 +65,8 @@ public:
             for (j = 1; j <= i; j++) {
                 if (i == j || j == 1) {
                     a[i][j] = 1;
-                } else {
+                }
+                else {
                     a[i][j] = a[i - 1][j] + a[i - 1][j - 1];
                 }
                 info.append(" ").append(std::to_string(a[i][j]));
@@ -78,13 +79,13 @@ public:
 
     void dealNotify1(const std::string& str) const
     {
-        std::cout << "\trecv notify1 in TestX::dealNotify1, threadId: " 
+        std::cout << "\trecv notify1 in TestX::dealNotify1, threadId: "
             << std::this_thread::get_id() << ", info: " << str << "\n\n";
     }
 
     void dealNotify2(const std::string& str, int32_t n) volatile
     {
-        std::cout << "\trecv notify2 in TestX::dealNotify2, threadId: " 
+        std::cout << "\trecv notify2 in TestX::dealNotify2, threadId: "
             << std::this_thread::get_id() << ", info: " << str << ", " << n << "\n\n";
     }
 
@@ -188,7 +189,7 @@ int main(int argc, char* argv[])
     msgBus.attachNotify(NOTIFY_1, &globalDealNoitfy1);
     msgBus.attachNotify(NOTIFY_2, &globalDealNoitfy2);
     msgBus.attachNotify(NOTIFY_3, &globalDealNoitfy3);
-    
+
     {
         TestX tt;
         tt.init();

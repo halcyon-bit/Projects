@@ -154,13 +154,13 @@ TEST(ThreadTest, push)
 
     thd.push([]() {
         std::cout << "lambda_2: sleep(1s)\n";
-        base::sleep(1000);
-    });
+    base::sleep(1000);
+        });
 
     thd.push([](int a, int b) {
         std::cout << "lambda_3(int, int): ";
-        std::cout << a << " " << b << std::endl;
-    }, 1, 3);
+    std::cout << a << " " << b << std::endl;
+        }, 1, 3);
 
     // 回调
     {

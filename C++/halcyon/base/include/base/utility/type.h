@@ -122,7 +122,7 @@ BASE_BEGIN_NAMESPACE
 // 我使用它以代替 static_cast 来强调“我没有做任何肮脏（不安全）的事情”
 // 用法与 static_cast 一致
 template<typename To, typename From>
-inline To implicit_cast(From const &f)
+inline To implicit_cast(From const& f)
 {
     return f;
 }
@@ -364,7 +364,7 @@ struct integer_max<arg> : std::integral_constant<size_t, arg>
 {};
 
 template<size_t arg1, size_t arg2, size_t... rest>
-struct integer_max<arg1, arg2, rest...> : std::integral_constant<size_t, arg1 >= arg2 
+struct integer_max<arg1, arg2, rest...> : std::integral_constant<size_t, arg1 >= arg2
     ? integer_max<arg1, rest...>::value : integer_max<arg2, rest...>::value>
 {};
 

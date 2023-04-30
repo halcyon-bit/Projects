@@ -39,7 +39,7 @@ public:
 public:  /// 构造函数
     constexpr basic_string_view() noexcept = default;
     constexpr basic_string_view(const basic_string_view& rhs) noexcept = default;
-    
+
     constexpr basic_string_view(const value_type* str)
         : str_(str), size_(traits_type::length(str))
     {}

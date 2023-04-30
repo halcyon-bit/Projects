@@ -43,7 +43,7 @@ private:  /// 通知数据
         ThreadWPtr thd;  //! 执行线程
     };
 
-public:  
+public:
     MessageBus()
     {
         thd_ = std::make_shared<Thread>();
@@ -150,7 +150,7 @@ public:  /// 通知相关接口(异步)，注意：通知一般是一对多的
         NotifyValue value = { func, id, thd == nullptr ? thd_ : thd };
         addNotify(msgKey, std::move(value));
     }
-    
+
     /**
      * @brief       反注册通知(普通函数)
      * @param[in]   通知key

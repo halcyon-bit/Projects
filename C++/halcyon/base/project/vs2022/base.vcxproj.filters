@@ -69,12 +69,6 @@
     <ClInclude Include="..\..\include\base\function\defer.h">
       <Filter>function</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\base\function\function.h">
-      <Filter>function</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\base\function\function_template.h">
-      <Filter>function</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\base\function\weak_callback.h">
       <Filter>function</Filter>
     </ClInclude>

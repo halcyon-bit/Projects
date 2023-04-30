@@ -187,7 +187,7 @@ TEST(StringViewTest, operation2)
 
     EXPECT_EQ(sv1.starts_with('1'), true);
     EXPECT_EQ(sv1.starts_with('2'), false);
- 
+
     EXPECT_EQ(sv1.starts_with("123"), true);
     EXPECT_EQ(sv1.starts_with("23"), false);
     EXPECT_EQ(sv1.starts_with(""), true);
@@ -387,7 +387,7 @@ TEST(StringViewTest, find_last_of)
 
     EXPECT_EQ(sv1.find_last_of(string_view("23"), 10), 5);
     EXPECT_EQ(sv1.find_last_of(string_view("23"), 10), str1.find_last_of(std::string("23"), 10));
-    EXPECT_EQ(sv1.find_last_of(string_view("23"), 3), 2); 
+    EXPECT_EQ(sv1.find_last_of(string_view("23"), 3), 2);
     EXPECT_EQ(sv1.find_last_of(string_view("23"), 3), str1.find_last_of(std::string("23"), 3));
     EXPECT_EQ(sv1.find_last_of(string_view("23"), 1), 1);
     EXPECT_EQ(sv1.find_last_of(string_view("23"), 1), str1.find_last_of(std::string("23"), 1));

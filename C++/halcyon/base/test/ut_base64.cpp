@@ -4,7 +4,7 @@
 
 using halcyon::base::Base64;
 
-class Base64Test : public testing::Test 
+class Base64Test : public testing::Test
 {
 public:
     static void SetUpTestCase()

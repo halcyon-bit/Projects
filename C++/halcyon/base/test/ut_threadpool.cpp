@@ -27,16 +27,16 @@ int main(int argc, char* argv[])
 
     std::cout << "thread size " << pool.getTotalThreadNum() << std::endl;
 
-    std::atomic<int32_t> index{0};
+    std::atomic<int32_t> index{ 0 };
     std::thread t([&]() {
         for (int32_t i = 0; i < 30; ++i) {
             pool.push([&]() {
                 index++;
-                std::cout << "function " << index.load() << std::endl;
-                base::sleep(2000);
-            });
+            std::cout << "function " << index.load() << std::endl;
+            base::sleep(2000);
+                });
         }
-    });
+        });
     t.detach();
 
     base::sleep(4000);
@@ -51,19 +51,19 @@ int main(int argc, char* argv[])
         for (int32_t i = 0; i < 10; ++i) {
             pool.push([] {
                 std::cout << "执行任务1, 线程" << std::this_thread::get_id() << "\n";
-            });
+                });
         }
-    });
+        });
 
     std::thread thd2([&pool] {
         for (int32_t i = 0; i < 10; ++i) {
             pool.push([] {
                 std::cout << "执行任务2, 线程" << std::this_thread::get_id() << "\n";
-            });
+                });
         }
-    });
+        });
 
-    thd1.join(); 
+    thd1.join();
     thd2.join();
 
     base::sleep(10000);

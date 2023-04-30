@@ -45,7 +45,7 @@ inline std::enable_if_t<!is_pointer_noref<F>::value && !is_memfunc_noref<F>::val
 }
 
 template<typename F, typename C, typename... Args>
-inline std::enable_if_t<is_memfunc_noref<F>::value && is_pointer_noref<C>::value, typename function_traits<std::decay_t<F>>::return_type> invoke(F&& f, C&& obj, Args&&... args)
+inline std::enable_if_t<is_memfunc_noref<F>::value&& is_pointer_noref<C>::value, typename function_traits<std::decay_t<F>>::return_type> invoke(F&& f, C&& obj, Args&&... args)
 {
     return (std::forward<C>(obj)->*std::forward<F>(f))(std::forward<Args>(args)...);
 }
@@ -136,7 +136,7 @@ namespace detail
  */
 template<typename F, typename Tuple>
 constexpr std::enable_if_t<std::tuple_size<std::remove_reference_t<Tuple>>::value != 0>
-    tuple_for_each(F&& f, Tuple&& t)
+tuple_for_each(F&& f, Tuple&& t)
 {
     detail::for_each_helper(std::forward<F>(f),
         HALCYON_INDEX_NS make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>(),
@@ -144,7 +144,7 @@ constexpr std::enable_if_t<std::tuple_size<std::remove_reference_t<Tuple>>::valu
 }
 template<typename F, typename Tuple>
 constexpr std::enable_if_t<std::tuple_size<std::remove_reference_t<Tuple>>::value == 0>
-    tuple_for_each(F&& f, Tuple&& t)
+tuple_for_each(F&& f, Tuple&& t)
 {}
 
 
@@ -209,7 +209,7 @@ typename function_traits<std::decay_t<F>>::return_type apply(F&& f, Tuple&& t)
 decltype(auto) apply(F&& f, Tuple&& t)
 #endif  // USE_CPP11
 {
-    return detail::apply_helper(std::forward<F>(f), std::forward<Tuple>(t), 
+    return detail::apply_helper(std::forward<F>(f), std::forward<Tuple>(t),
         HALCYON_INDEX_NS make_index_sequence<std::tuple_size<std::remove_reference_t<Tuple>>::value>());
 }
 
@@ -254,7 +254,7 @@ BASE_END_NAMESPACE
 
 
 #ifdef _BASE_TEST_
- 
+
 #include <string>
 #include <memory>
 

@@ -29,7 +29,7 @@ TEST(MD5Test, md5_effective)
 {
     MD5 md5;
     std::string str4{ "awozxohvaerughaphpuhizupgisdgfipuawefgbipuabiughiurgbnzvpziuhsgiuahtweignapighr[eiaohgaiuhga;jfzubvu" };
-    
+
     for (int32_t i = 0; i < 1000000; ++i) {
         md5.reset();
         md5.update(str4);

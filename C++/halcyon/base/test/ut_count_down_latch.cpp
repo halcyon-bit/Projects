@@ -45,7 +45,7 @@ private:
         std::stringstream ss;
         ss << "thread[" << std::this_thread::get_id() << "] ok" << std::endl;
         std::cout << ss.str();
-        
+
         latch_.countDown();
     }
 

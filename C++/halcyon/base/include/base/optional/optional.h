@@ -92,7 +92,7 @@ public:  // 构造函数
 
 public:
     /**
-     * @brief   是否初始化 
+     * @brief   是否初始化
      */
     bool isInit() const
     {
@@ -100,7 +100,7 @@ public:
     }
 
     /**
-     * @brief   构造 
+     * @brief   构造
      */
     template<typename... Args>
     void emplace(Args&&... args)
@@ -111,7 +111,7 @@ public:
 
 public:
     /**
-     * @brief   获取数据，若未初始化，则抛出异常 
+     * @brief   获取数据，若未初始化，则抛出异常
      */
     T& operator*()
     {
@@ -142,7 +142,7 @@ public:
 
 public:
     /**
-     * @brief   是否初始化 
+     * @brief   是否初始化
      */
     operator bool() const
     {

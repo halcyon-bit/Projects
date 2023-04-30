@@ -38,7 +38,7 @@ namespace detail
     struct index_of;
 
     template<typename T, typename U, typename... Rest>
-    struct index_of<T, U, Rest...> 
+    struct index_of<T, U, Rest...>
         : std::integral_constant<int32_t, index_of<T, Rest...>::value >= 0 ? index_of<T, Rest...>::value + 1 : index_of<T, Rest...>::value>
     {};
 
@@ -70,7 +70,7 @@ namespace detail
 
 /**
  * @brief   类似于 union，可以定义多种类型，允许赋不同类型的值。
- * 
+ *
  * @ps      C++17 std::variant
  */
 template<typename... T>

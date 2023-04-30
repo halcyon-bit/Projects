@@ -100,13 +100,13 @@ TEST(UtilityTest, type_name_)
 
 TEST(UtilityTest, invoke_)
 {
-    int n1{1};
-    double db{1.1};
-    std::string str{"hello"};
-    int n2{2};
+    int n1{ 1 };
+    double db{ 1.1 };
+    std::string str{ "hello" };
+    int n2{ 2 };
     base::invoke(&test1, n1, db, str, n2);
     base::invoke(&test1, n1, 4.4, str, 12);
-    
+
     int ret1 = base::invoke(&test2, 10, 44);
     EXPECT_EQ(ret1, 54);
     ret1 = base::invoke(&test2, n1, n2);
@@ -228,12 +228,12 @@ TEST(UtilityTest, apply_)
     auto tp2 = std::make_tuple(10, 20.22, std::string("tuple"), 30);
     base::apply(&test1, tp1);
     base::apply(&test1, tp2);
-    
+
     int ret1 = base::apply(&test2, std::make_tuple(10, 44));
     EXPECT_EQ(ret1, 54);
     std::string ret2 = base::apply(&test3, std::make_tuple("hello", " world"));
     EXPECT_EQ(ret2, "hello world");
-    
+
     std::string str1("hello"), str2(" world");
     ret2 = base::apply(&test3, std::make_tuple(str1, str2));
     EXPECT_EQ(ret2, "hello world");
@@ -263,17 +263,7 @@ TEST(UtilityTest, apply_)
 TEST(UtilityTest, zip_)
 {
     {
-        std::tuple<int, double> t1{1, 6.6}, t2{2, 7.7};
-  	    auto ret = base::zip(t1, t2);
-        EXPECT_EQ(std::get<0>(t1), std::get<0>(ret).first);
-        EXPECT_EQ(std::get<0>(t2), std::get<0>(ret).second);
-        EXPECT_EQ(std::get<1>(t1), std::get<1>(ret).first);
-        EXPECT_EQ(std::get<1>(t2), std::get<1>(ret).second);
-    }
-
-    {
-        std::tuple<int, std::string> t1{1, "hello"};
-        std::tuple<std::string, double> t2{"world", 2.0};
+        std::tuple<int, double> t1{ 1, 6.6 }, t2{ 2, 7.7 };
         auto ret = base::zip(t1, t2);
         EXPECT_EQ(std::get<0>(t1), std::get<0>(ret).first);
         EXPECT_EQ(std::get<0>(t2), std::get<0>(ret).second);
@@ -282,8 +272,18 @@ TEST(UtilityTest, zip_)
     }
 
     {
-        std::tuple<int, std::string> t1{1, "hello"};
-        std::tuple<std::string, double, int> t2{"world", 2.0, 3};
+        std::tuple<int, std::string> t1{ 1, "hello" };
+        std::tuple<std::string, double> t2{ "world", 2.0 };
+        auto ret = base::zip(t1, t2);
+        EXPECT_EQ(std::get<0>(t1), std::get<0>(ret).first);
+        EXPECT_EQ(std::get<0>(t2), std::get<0>(ret).second);
+        EXPECT_EQ(std::get<1>(t1), std::get<1>(ret).first);
+        EXPECT_EQ(std::get<1>(t2), std::get<1>(ret).second);
+    }
+
+    {
+        std::tuple<int, std::string> t1{ 1, "hello" };
+        std::tuple<std::string, double, int> t2{ "world", 2.0, 3 };
         // auto ret = base::zip(t1, t2);
     }
 }

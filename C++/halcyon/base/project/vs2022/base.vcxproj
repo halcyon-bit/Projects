@@ -17,8 +17,6 @@
     <ClInclude Include="..\..\include\base\common\noncopyable.h" />
     <ClInclude Include="..\..\include\base\common\platform.h" />
     <ClInclude Include="..\..\include\base\function\defer.h" />
-    <ClInclude Include="..\..\include\base\function\function.h" />
-    <ClInclude Include="..\..\include\base\function\function_template.h" />
     <ClInclude Include="..\..\include\base\function\weak_callback.h" />
     <ClInclude Include="..\..\include\base\md5\md5.h" />
     <ClInclude Include="..\..\include\base\message\message_bus.h" />

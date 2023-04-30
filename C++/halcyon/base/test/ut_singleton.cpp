@@ -10,17 +10,17 @@ class Test
 public:
     Test()
     {
-        std::cout << "tid=" << std::this_thread::get_id() 
+        std::cout << "tid=" << std::this_thread::get_id()
             << ", constructing Test\n\n";
     }
 
     ~Test()
     {
-        std::cout << "tid=" << std::this_thread::get_id() 
+        std::cout << "tid=" << std::this_thread::get_id()
             << ", destructing Test.\n\n";
     }
 
-    const std::string& name() const 
+    const std::string& name() const
     {
         return name_;
     }
@@ -39,9 +39,9 @@ class TestNoDestroy
 public:
     void no_destroy();
 
-    TestNoDestroy() 
+    TestNoDestroy()
     {
-        std::cout << "tid=" << std::this_thread::get_id() 
+        std::cout << "tid=" << std::this_thread::get_id()
             << ", constructing TestNoDestroy\n\n";
     }
 
@@ -55,7 +55,7 @@ public:
 void threadFunc()
 {
     std::cout << "tid=" << std::this_thread::get_id()
-        << ", name=" << Singleton<Test>::instance().name() 
+        << ", name=" << Singleton<Test>::instance().name()
         << std::endl << std::endl;
     Singleton<Test>::instance().setName("only one, changed");
 }

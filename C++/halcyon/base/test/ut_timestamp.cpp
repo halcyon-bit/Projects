@@ -43,6 +43,6 @@ int main(int argc, char* argv[])
     cv.wait_until(lock, time);
     time = base::now();
     std::cout << "time now: " << base::toFormatString(time) << std::endl;
-    
+
     return 0;
 }

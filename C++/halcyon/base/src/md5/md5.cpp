@@ -4,8 +4,8 @@
 
 using namespace halcyon::base;
 
-/* 
- * Constants for MD5transform routine. 
+/*
+ * Constants for MD5transform routine.
  */
 #define S11 7
 #define S12 12
@@ -24,8 +24,8 @@ using namespace halcyon::base;
 #define S43 15
 #define S44 21
 
-/* 
- * F, G, H and I are basic MD5 functions. 
+/*
+ * F, G, H and I are basic MD5 functions.
  */
 #define F(x, y, z) (((x) & (y)) | ((~x) & (z)))
 #define G(x, y, z) (((x) & (z)) | ((y) & (~z)))
@@ -33,13 +33,13 @@ using namespace halcyon::base;
 #define I(x, y, z) ((y) ^ ((x) | (~z)))
 
 /*
- * ROTATE_LEFT rotates x left n bits. 
+ * ROTATE_LEFT rotates x left n bits.
  */
 #define ROTATE_LEFT(x, n) (((x) << (n)) | ((x) >> (32-(n))))
 
 /*
  * FF, GG, HH, and II transformations for rounds 1, 2, 3, and 4.
- * Rotation is separate from addition to prevent recomputation. 
+ * Rotation is separate from addition to prevent recomputation.
  */
 #define FF(a, b, c, d, x, s, ac) { \
     (a) += F ((b), (c), (d)) + (x) + ac; \

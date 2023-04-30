@@ -9,7 +9,7 @@ using namespace halcyon::base;
 class TestX
 {
 public:
-    void zero() 
+    void zero()
     {
         std::cout << "zero()\n\n";
     }
@@ -55,7 +55,7 @@ TEST(WeakCallBackTest, weakcallback)
     std::cout << "call oner: ";
     cb1r(i);
     EXPECT_EQ(i, 1000);
-    
+
     WeakCallback<TestX> cb2(testX, std::bind(&TestX::one, std::placeholders::_1, 900));
     std::cout << "call one: ";
     cb2();
@@ -69,15 +69,15 @@ TEST(WeakCallBackTest, weakcallback)
     std::cout << "call zeroc: ";
     cb0c();
     std::cout << std::endl << std::endl;
-    
+
     std::cout << "call one: ";
     cb1(120);
     std::cout << std::endl << std::endl;
-    
+
     std::cout << "call onec: ";
     cb1c(119);
     std::cout << std::endl << std::endl;
-    
+
     std::cout << "call one: ";
     cb2();
     std::cout << std::endl << std::endl;
