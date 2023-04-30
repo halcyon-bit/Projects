@@ -58,7 +58,8 @@ private:
      * @brief   构造函数(私有, 外部无法创建对象)
      */
     template<typename T>
-    _DeferredAction(T&& p) : func_(std::bind(std::forward<T>(p)))
+    _DeferredAction(T&& p)
+        : func_(std::bind(std::forward<T>(p)))
     {}
 
     _DeferredAction() = delete;
