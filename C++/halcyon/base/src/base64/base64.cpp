@@ -1,18 +1,17 @@
-﻿#include <base/base64/base64.h>
-
-using namespace halcyon::base;
-using std::string;
+﻿#include "base/base64/base64.h"
 
 BASE_BEGIN_NAMESPACE
 
-static const string kBase64Table{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" };
+static const std::string kBase64Table{ "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" };
 static constexpr char kBase64Pad_{ '=' };
 
 BASE_END_NAMESPACE
 
-string Base64::encode(const uint8_t* str, int32_t length)
+using namespace halcyon::base;
+
+std::string Base64::encode(const uint8_t* str, int32_t length)
 {
-    string result;
+    std::string result;
     const uint8_t* current{ str };
     while (length > 2) {
         result += kBase64Table[current[0] >> 2];
@@ -29,8 +28,7 @@ string Base64::encode(const uint8_t* str, int32_t length)
         if (length % 3 == 1) {
             result += kBase64Table[(current[0] & 0x03) << 4];
             result += "==";
-        }
-        else if (length % 3 == 2) {
+        } else if (length % 3 == 2) {
             result += kBase64Table[((current[0] & 0x03) << 4) + (current[1] >> 4)];
             result += kBase64Table[(current[1] & 0x0f) << 2];
             result += "=";
@@ -39,7 +37,7 @@ string Base64::encode(const uint8_t* str, int32_t length)
     return result;
 }
 
-string Base64::decode(const char* str, int32_t length)
+std::string Base64::decode(const char* str, int32_t length)
 {
     // 解码表
     const char kDecodeTable[] = {
@@ -62,7 +60,7 @@ string Base64::decode(const char* str, int32_t length)
     };
 
     int32_t bin{ 0 }, i{ 0 };
-    string result;
+    std::string result;
     const char* current{ str };
     char ch;
     while ((ch = *current++) != '\0' && length-- > 0) {

@@ -4,9 +4,6 @@
     <Filter Include="base64">
       <UniqueIdentifier>{536c823f-6e06-480d-8ae2-152cc873cf2b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="md5">
-      <UniqueIdentifier>{4ee44dbc-3265-45b8-9ce7-0acb496a14ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="function">
       <UniqueIdentifier>{c0952ee2-0bb5-4287-92f9-49b80c12f461}</UniqueIdentifier>
     </Filter>
@@ -46,6 +43,12 @@
     <Filter Include="task">
       <UniqueIdentifier>{2be808f6-37df-49ae-a4b2-e1ba4be07d2b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="md5">
+      <UniqueIdentifier>{4ee44dbc-3265-45b8-9ce7-0acb496a14ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="message">
+      <UniqueIdentifier>{010ea1e5-ae1c-4f45-8f64-2b94c221484e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\include\base\base64\base64.h">
@@ -64,12 +67,6 @@
       <Filter>common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\base\function\defer.h">
-      <Filter>function</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\base\function\function.h">
-      <Filter>function</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\include\base\function\function_template.h">
       <Filter>function</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\base\function\weak_callback.h">
@@ -108,9 +105,6 @@
     <ClInclude Include="..\..\include\base\utility\utility.h">
       <Filter>utility</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\base\utility\lazy.h">
-      <Filter>utility</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\base\variant\variant.h">
       <Filter>variant</Filter>
     </ClInclude>
@@ -120,14 +114,23 @@
     <ClInclude Include="..\..\include\base\task\task.h">
       <Filter>task</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\include\base\thread\thread.h">
-      <Filter>thread</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\include\base\thread\thread_task.h">
       <Filter>thread</Filter>
     </ClInclude>
     <ClInclude Include="..\..\include\base\thread\thread_pool.h">
       <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\message\message_bus.h">
+      <Filter>message</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\thread\thread.h">
+      <Filter>thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\utility\coding.h">
+      <Filter>utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\include\base\utility\bind.h">
+      <Filter>utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

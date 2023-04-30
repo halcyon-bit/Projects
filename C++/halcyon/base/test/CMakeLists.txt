@@ -68,6 +68,10 @@ target_link_libraries(ut_any gtest pthread)
 add_executable(ut_base64 ${SRC_PATH}/ut_base64.cpp)
 target_link_libraries(ut_base64 gtest halcyon_base pthread)
 
+# bind
+add_executable(ut_bind ${SRC_PATH}/ut_bind.cpp)
+target_link_libraries(ut_bind gtest pthread)
+
 # blocking_queue
 add_executable(ut_blocking_queue ${SRC_PATH}/ut_blocking_queue.cpp)
 target_link_libraries(ut_blocking_queue pthread)
@@ -82,17 +86,13 @@ add_executable(ut_defer ${SRC_PATH}/ut_defer.cpp)
 # elapsed_timer
 add_executable(ut_elapsed_timer ${SRC_PATH}/ut_elapsed_timer.cpp)
 
-# function
-add_executable(ut_function ${SRC_PATH}/ut_function.cpp)
-target_link_libraries(ut_function gtest pthread)
-
-# lazy
-add_executable(ut_lazy ${SRC_PATH}/ut_lazy.cpp)
-target_link_libraries(ut_lazy gtest pthread)
-
 # md5
 add_executable(ut_md5 ${SRC_PATH}/ut_md5.cpp)
 target_link_libraries(ut_md5 gtest halcyon_base pthread)
+
+# message_bus
+add_executable(ut_message_bus ${SRC_PATH}/ut_message_bus.cpp)
+target_link_libraries(ut_message_bus halcyon_base pthread)
 
 # optional
 add_executable(ut_optional ${SRC_PATH}/ut_optional.cpp)
@@ -111,17 +111,22 @@ target_link_libraries(ut_string_view gtest pthread)
 
 # thread
 add_executable(ut_thread ${SRC_PATH}/ut_thread.cpp)
-target_link_libraries(ut_thread pthread)
+target_link_libraries(ut_thread gtest pthread)
+
+# threadpool
+add_executable(ut_threadpool ${SRC_PATH}/ut_threadpool.cpp)
+target_link_libraries(ut_threadpool halcyon_base pthread)
 
 # timestamp
 add_executable(ut_timestamp ${SRC_PATH}/ut_timestamp.cpp)
 target_link_libraries(ut_timestamp pthread)
 
-# types
-add_executable(ut_types ${SRC_PATH}/ut_types.cpp)
+# type
+add_executable(ut_type ${SRC_PATH}/ut_type.cpp)
 
 # utility
 add_executable(ut_utility ${SRC_PATH}/ut_utility.cpp)
+target_link_libraries(ut_utility gtest pthread)
 
 # variant
 add_executable(ut_variant ${SRC_PATH}/ut_variant.cpp)

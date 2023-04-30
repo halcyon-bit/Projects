@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import logging
+import re
 import ctypes
+import logging
+from logging.handlers import TimedRotatingFileHandler
 
 color_blue = 0x01
 color_green = 0x02
@@ -17,20 +19,24 @@ def set_color(color, handle=std_out_handle):
 
 class Logger:
     def __init__(self, path, clevel=logging.DEBUG, flevel=logging.DEBUG):
-        self.logger = logging.getLogger(path)
+        logging.basicConfig(encoding="uft8")
+        self.logger = logging.getLogger()
         self.logger.setLevel(logging.DEBUG)
 
-        fmt = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s', '%Y-%m-%d %H:%M:%S')
+        fmt = logging.Formatter('[%(asctime)s] [%(levelname)s] %(message)s')
+
         # 设置控制台日志
         cmd = logging.StreamHandler()
         cmd.setFormatter(fmt)
         cmd.setLevel(clevel)
 
-        # 设置文件日志
-        file = logging.FileHandler(path)
-        file.setFormatter(fmt)
+        # 设置文件日志，按时间滚动
+        file = TimedRotatingFileHandler(path, when='D', interval=1, backupCount=5)
+        file.suffix="%Y-%m-%d_%H-%M-%S.log"
+        file.extMatch = re.compile(r"^\d{4}-\d{2}-\d{2}_-\d{2}-\d{2}-\d{2}.log$")
         file.setLevel(flevel)
-
+        file.setFormatter(fmt)
+        
         self.logger.addHandler(cmd)
         self.logger.addHandler(file)
 
@@ -54,7 +60,7 @@ class Logger:
         self.logger.critical(message)
 
 if __name__ == '__main__':
-    log_test = Logger("test.log", logging.DEBUG, logging.WARNING)
+    log_test = Logger("log_test", logging.DEBUG, logging.WARNING)
     log_test.debug("debug information")
     log_test.info("info information")
     log_test.warning("warn information")

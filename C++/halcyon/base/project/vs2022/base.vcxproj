@@ -17,10 +17,9 @@
     <ClInclude Include="..\..\include\base\common\noncopyable.h" />
     <ClInclude Include="..\..\include\base\common\platform.h" />
     <ClInclude Include="..\..\include\base\function\defer.h" />
-    <ClInclude Include="..\..\include\base\function\function.h" />
-    <ClInclude Include="..\..\include\base\function\function_template.h" />
     <ClInclude Include="..\..\include\base\function\weak_callback.h" />
     <ClInclude Include="..\..\include\base\md5\md5.h" />
+    <ClInclude Include="..\..\include\base\message\message_bus.h" />
     <ClInclude Include="..\..\include\base\optional\optional.h" />
     <ClInclude Include="..\..\include\base\range\range.h" />
     <ClInclude Include="..\..\include\base\singleton\singleton.h" />
@@ -28,12 +27,13 @@
     <ClInclude Include="..\..\include\base\task\task.h" />
     <ClInclude Include="..\..\include\base\thread\blocking_queue.h" />
     <ClInclude Include="..\..\include\base\thread\count_down_latch.h" />
-    <ClInclude Include="..\..\include\base\thread\thread.h" />
     <ClInclude Include="..\..\include\base\thread\thread_pool.h" />
+    <ClInclude Include="..\..\include\base\thread\thread.h" />
     <ClInclude Include="..\..\include\base\thread\thread_task.h" />
     <ClInclude Include="..\..\include\base\time\elapsed_timer.h" />
     <ClInclude Include="..\..\include\base\time\timestamp.h" />
-    <ClInclude Include="..\..\include\base\utility\lazy.h" />
+    <ClInclude Include="..\..\include\base\utility\bind.h" />
+    <ClInclude Include="..\..\include\base\utility\coding.h" />
     <ClInclude Include="..\..\include\base\utility\type.h" />
     <ClInclude Include="..\..\include\base\utility\utility.h" />
     <ClInclude Include="..\..\include\base\variant\variant.h" />
@@ -98,9 +98,10 @@
       <PreprocessorDefinitions>_DEBUG;_LIB;WIN64;HALCYON_BASE_DLL_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>..\..\include;..\..\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>..\..\include;..\..\src;..\..\..\depends\thirdparty\jsoncpp\1.9.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp14</LanguageStandard>
       <ProgramDataBaseFileName>..\..\lib\win64_$(PlatformToolset)_$(Configuration)\$(ProjectName)d.pdb</ProgramDataBaseFileName>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

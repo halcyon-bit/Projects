@@ -2,22 +2,22 @@
 
 #include <iostream>
 
-void testDefer1(const char* name)
+void test1(const char* name)
 {
     std::cout << "call " << __func__ << ": " << name << std::endl;
 }
 
-void testDefer2()
+void test2()
 {
     std::cout << "call " << __func__ << std::endl;
     defer([]() {
-        std::cout << "testDefer2 defer lambda first\n"; });
+        std::cout << "test2 defer lambda first\n"; });
 
     defer([]() {
-        std::cout << "testDefer2 defer lambda second\n"; });
+        std::cout << "test2 defer lambda second\n"; });
 
     defer([]() {
-        std::cout << "testDefer2 defer lambda third\n"; });
+        std::cout << "test2 defer lambda third\n"; });
 }
 
 int main(int argc, char* argv[])
@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
         std::cout << "main defer lambda third\n"; });
 
     defer([]() {
-        testDefer1("hello boy"); });
+        test1("hello boy"); });
 
     {
         defer([]() { std::cout << "defer a\n"; });
@@ -42,6 +42,6 @@ int main(int argc, char* argv[])
     }
 
     std::cout << "main done\n";
-    testDefer2();
+    test2();
     return 0;
 }

@@ -1,8 +1,6 @@
 ﻿#include "base/thread/thread_pool.h"
 #include "base/time/timestamp.h"
 
-#include <chrono>
-#include <sstream>
 #include <iostream>
 
 using namespace halcyon;
@@ -29,17 +27,16 @@ int main(int argc, char* argv[])
 
     std::cout << "thread size " << pool.getTotalThreadNum() << std::endl;
 
-    std::atomic<int32_t> index;
-    index.store(0);
+    std::atomic<int32_t> index{ 0 };
     std::thread t([&]() {
         for (int32_t i = 0; i < 30; ++i) {
-            pool.addTask([&]() {
+            pool.push([&]() {
                 index++;
-                std::cout << "function " << index.load() << std::endl;
-                base::sleep(2000);
-            });
+            std::cout << "function " << index.load() << std::endl;
+            base::sleep(2000);
+                });
         }
-    });
+        });
     t.detach();
 
     base::sleep(4000);
@@ -52,37 +49,29 @@ int main(int argc, char* argv[])
 
     std::thread thd1([&pool] {
         for (int32_t i = 0; i < 10; ++i) {
-            auto thdId = std::this_thread::get_id();
-            pool.addTask([thdId] { 
-                std::stringstream ss;
-                ss << "执行任务, 添加任务线程: " << thdId
-                << "\t\t执行线程：" << std::this_thread::get_id() << "\n";
-                std::cout << ss.str();
-            });
+            pool.push([] {
+                std::cout << "执行任务1, 线程" << std::this_thread::get_id() << "\n";
+                });
         }
-    });
+        });
 
     std::thread thd2([&pool] {
         for (int32_t i = 0; i < 10; ++i) {
-            auto thdId = std::this_thread::get_id();
-            pool.addTask([thdId] {
-                std::stringstream ss;
-                ss << "执行任务, 添加任务线程: " << thdId
-                << "\t\t执行线程：" << std::this_thread::get_id() << "\n";
-                std::cout << ss.str();
-            });
+            pool.push([] {
+                std::cout << "执行任务2, 线程" << std::this_thread::get_id() << "\n";
+                });
         }
-    });
+        });
 
-    thd1.join(); 
+    thd1.join();
     thd2.join();
 
     base::sleep(10000);
     std::cout << "thread size " << pool.getTotalThreadNum() << std::endl;
     std::cout << "waiting size " << pool.getWaitingThreadNum() << std::endl;
-    pool.addTask(&test);
+    pool.push(&test);
     Foo f;
-    pool.addTask(&Foo::test, &f, 100);
+    pool.push(&Foo::test, &f, 100);
     pool.shutDown();
     return 0;
 }

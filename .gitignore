@@ -31,10 +31,12 @@
 *.out
 *.app
 
+# Python
+__pycache__
+
 # vs
 .vs
 tmp
-packages
 win64_*
 
 # linux
