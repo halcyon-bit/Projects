@@ -3,7 +3,6 @@
 #if defined USE_CPP11 || defined USE_CPP14
 
 #ifdef LINUX
-//#include <sys/io.h>
 #include <unistd.h>
 #include <dirent.h>
 #include <sys/stat.h>
@@ -22,7 +21,13 @@ LOG_BEGIN_NAMESPACE
 bool file::exists(STRING_VIEW_NS string_view filename)
 {
 #if defined USE_CPP11 || defined USE_CPP14
+
+#ifdef LINUX
     return access(filename.data(), 0) == 0;
+#elif defined WINDOWS
+    return _access(filename.data(), 0) == 0;
+#endif
+
 #else
     return std::filesystem::exists(filename.data());
 #endif
@@ -44,9 +49,17 @@ bool file::createDir(STRING_VIEW_NS string_view dir)
     for (size_t i = start + 1; i < size; ++i) {
         if (dir[i] == '\\' || dir[i] == '/') {
             std::string tmp(dir.substr(0, i).data(), i);
+#ifdef LINUX
             ret = mkdir(tmp.data(), 0777) == 0;
+#elif defined WINDOWS
+            ret = _mkdir(tmp.data()) == 0;
+#endif
         } else if (i == size - 1) {
+#ifdef LINUX
             ret = mkdir(dir.data(), 0777) == 0;
+#elif defined WINDOWS
+            ret = _mkdir(dir.data()) == 0;
+#endif
         }
     }
     return ret;
@@ -54,71 +67,85 @@ bool file::createDir(STRING_VIEW_NS string_view dir)
     return std::filesystem::create_directories(dir.data());
 #endif
 }
-// #include <stdio.h>
-// int deleteAll(char* directory) {
-//     DIR* dir = NULL;
-//     char dpath[PATH_MAX];
-//     char fpath[PATH_MAX];
-//     char answer;
-//     _Bool delete = 1;
-//     if ((dir = opendir(directory)) == NULL) {
-//         printf("opendir: No such a directory: %s\n", directory);
-//         return 1;
-//     }
-//     struct dirent* dirp;
-//     while ((dirp = readdir(dir)) != NULL) {
-//         if (dirp->d_type == DT_DIR) {
-//             if (dirp->d_name[0] == '.')
-//                 continue;
-//             deleteAll(dpath);
-//         }
-//         if (dirp->d_type == DT_REG) {
-//             snprintf(fpath, (size_t)PATH_MAX, "%s/%s", directory, dirp->d_name);
-//             if (check) {
-//                 printf("\033[1;31mAre you sure to delete file \"%s\"?(y/n)\033[0m\n", dirp->d_name);
-//                 answer = getchar();
-//                 getchar();
-//                 if (answer == 'n')
-//                     delete = 0;
-//                 else
-//                     delete = 1;
-// }
-//             if (delete) {
-//                 if (!remove(fpath))
-//                     printf("\033[32mFile removed:%s\033[0m\n", dirp->d_name);
-//                 else
-//                     perror("remove");
-//             }
-//         }
-//     }
-//     closedir(dir);
-//     if (!rmdir(directory))
-//         printf("\033[32mDirectory removed:%s\033[0m\n", directory);
-//     return 0;
-// }
+
+#if defined USE_CPP11 || defined USE_CPP14
+#ifdef LINUX
+static bool remove_dir(STRING_VIEW_NS string_view dir)
+{
+    DIR* newDir = opendir(dir.data());
+    if (nullptr == newDir) {
+        return false;
+    }
+
+    struct dirent* dirp;
+    while ((dirp = readdir(newDir)) != nullptr) {
+        if (dirp->d_type == DT_DIR) {
+            if (dirp->d_name[0] == '.')
+                continue;
+            
+            std::string path(dir.data());
+            path.append("/").append(dirp->d_name);
+            if (!remove_dir(path)) {
+                return false;
+            }
+        } else if (dirp->d_type == DT_REG) {
+            std::string path(dir.data());
+            path.append("/").append(dirp->d_name);
+            if (remove(path.c_str()) != 0) {
+                return false;
+            }
+        }
+    }
+    closedir(newDir);
+    return rmdir(dir.data()) == 0;
+}
+#elif defined WINDOWS
+static bool remove_dir(STRING_VIEW_NS string_view dir)
+{
+    std::string newDir(dir.data());
+    newDir.append("\\*.*");
+
+    struct _finddata_t fileInfo;
+    intptr_t handle = _findfirst(newDir.c_str(), &fileInfo);
+    if (handle == -1) {
+        return false;
+    }
+
+    // 删除该文件夹下的所有文件(夹)
+    do {
+        if (fileInfo.attrib & _A_SUBDIR) {
+            if (strcmp(fileInfo.name, ".") == 0 || strcmp(fileInfo.name, "..") == 0)
+                continue;
+
+            newDir = dir.data();
+            newDir.append("\\").append(fileInfo.name);
+            // 文件夹，再次遍历
+            if (!remove_dir(newDir)) {
+                return false;
+            }
+        }
+        else {
+            // 文件
+            newDir = dir.data();
+            newDir.append("\\").append(fileInfo.name);
+            if (remove(newDir.c_str()) != 0) {
+                _findclose(handle);
+                return false;
+            }
+        }
+    } while (!_findnext(handle, &fileInfo));
+
+    _findclose(handle);
+    // 删除空文件夹
+    return _rmdir(dir.data()) == 0;
+}
+#endif
+#endif
 
 bool file::removeDir(STRING_VIEW_NS string_view dir)
 {
 #if defined USE_CPP11 || defined USE_CPP14
-    return remove(dir.data()) == 0;
-    //return _rmdir(dir.data()) == 0;
-    bool ret = false;
-    size_t end = dir.find("/");
-    if (end == -1) {
-        end = dir.find("\\");
-    }
-    if (end == -1) {
-        return false;
-    }
-
-    int32_t size = (int32_t)dir.size();
-    for (size_t i = size - 1; i > end; --i) {
-        if (dir[i] == '\\' || dir[i] == '/') {
-            std::string tmp(dir.substr(0, i).data(), i);
-            //ret = _rmdir(tmp.data()) == 0;
-        }
-    }
-    return ret;
+    return remove_dir(dir);
 #else
     return std::filesystem::remove_all(dir.data());
 #endif
