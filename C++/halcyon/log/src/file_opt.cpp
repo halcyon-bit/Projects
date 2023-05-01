@@ -86,20 +86,16 @@ static bool remove_all(STRING_VIEW_NS string_view dir)
             if (dirp->d_name[0] == '.')
                 continue;
             
-            path.rease(path.rfind("/") + 1);
+            path.erase(path.rfind("/") + 1);
             path.append(dirp->d_name);
-            //std::string path(dir.data());
-            //path.append("/").append(dirp->d_name);
             // 文件夹，再次遍历
             if (!remove_all(path)) {
                 return false;
             }
         } else if (dirp->d_type == DT_REG) {
             // 文件
-            path.rease(path.rfind("/") + 1);
+            path.erase(path.rfind("/") + 1);
             path.append(dirp->d_name);
-            //std::string path(dir.data());
-            //path.append("/").append(dirp->d_name);
             if (remove(path.c_str()) != 0) {
                 return false;
             }

@@ -40,7 +40,7 @@ TEST(FileOptTest, dir)
         EXPECT_EQ(ret, true);
     }
 
-    base::sleep(2000);
+    base::sleep(500);
 
     // remove dir
     {
@@ -68,7 +68,7 @@ TEST(FileOptTest, dir)
         bool ret = log::file::createDir("./test/test");
         EXPECT_EQ(ret, true);
 
-        base::sleep(2000);
+        base::sleep(500);
 
         ret = log::file::removeDir("./test");
         EXPECT_EQ(ret, true);
@@ -101,7 +101,7 @@ TEST(FileOptTest, dir)
         ret = log::file::exists("./test/test/9.txt");
         EXPECT_EQ(ret, true);
 
-        base::sleep(2000);
+        base::sleep(500);
 
         ret = log::file::removeDir("./test/test");
         EXPECT_EQ(ret, true);
@@ -158,7 +158,7 @@ TEST(FileOptTest, dir)
         ret = log::file::exists("./test/9.txt");
         EXPECT_EQ(ret, true);
 
-        base::sleep(2000);
+        base::sleep(500);
 
         ret = log::file::removeDir("./test/");
         EXPECT_EQ(ret, true);
