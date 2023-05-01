@@ -70,37 +70,47 @@ bool file::createDir(STRING_VIEW_NS string_view dir)
 
 #if defined USE_CPP11 || defined USE_CPP14
 #ifdef LINUX
-static bool remove_dir(STRING_VIEW_NS string_view dir)
+static bool remove_all(STRING_VIEW_NS string_view dir)
 {
     DIR* newDir = opendir(dir.data());
     if (nullptr == newDir) {
         return false;
     }
 
+    std::string path(dir.data());
+    path.append("/");
     struct dirent* dirp;
+    // 删除该文件夹下的所有文件(夹)
     while ((dirp = readdir(newDir)) != nullptr) {
         if (dirp->d_type == DT_DIR) {
             if (dirp->d_name[0] == '.')
                 continue;
             
-            std::string path(dir.data());
-            path.append("/").append(dirp->d_name);
-            if (!remove_dir(path)) {
+            path.rease(path.rfind("/") + 1);
+            path.append(dirp->d_name);
+            //std::string path(dir.data());
+            //path.append("/").append(dirp->d_name);
+            // 文件夹，再次遍历
+            if (!remove_all(path)) {
                 return false;
             }
         } else if (dirp->d_type == DT_REG) {
-            std::string path(dir.data());
-            path.append("/").append(dirp->d_name);
+            // 文件
+            path.rease(path.rfind("/") + 1);
+            path.append(dirp->d_name);
+            //std::string path(dir.data());
+            //path.append("/").append(dirp->d_name);
             if (remove(path.c_str()) != 0) {
                 return false;
             }
         }
     }
     closedir(newDir);
+    // 删除空文件夹
     return rmdir(dir.data()) == 0;
 }
 #elif defined WINDOWS
-static bool remove_dir(STRING_VIEW_NS string_view dir)
+static bool remove_all(STRING_VIEW_NS string_view dir)
 {
     std::string newDir(dir.data());
     newDir.append("\\*.*");
@@ -114,20 +124,20 @@ static bool remove_dir(STRING_VIEW_NS string_view dir)
     // 删除该文件夹下的所有文件(夹)
     do {
         if (fileInfo.attrib & _A_SUBDIR) {
-            if (strcmp(fileInfo.name, ".") == 0 || strcmp(fileInfo.name, "..") == 0)
+            if (fileInfo.name[0] == '.')
                 continue;
 
-            newDir = dir.data();
-            newDir.append("\\").append(fileInfo.name);
+            newDir.erase(newDir.rfind('\\') + 1);
+            newDir.append(fileInfo.name);
             // 文件夹，再次遍历
-            if (!remove_dir(newDir)) {
+            if (!remove_all(newDir)) {
                 return false;
             }
         }
         else {
             // 文件
-            newDir = dir.data();
-            newDir.append("\\").append(fileInfo.name);
+            newDir.erase(newDir.rfind('\\') + 1);
+            newDir.append(fileInfo.name);
             if (remove(newDir.c_str()) != 0) {
                 _findclose(handle);
                 return false;
@@ -145,7 +155,7 @@ static bool remove_dir(STRING_VIEW_NS string_view dir)
 bool file::removeDir(STRING_VIEW_NS string_view dir)
 {
 #if defined USE_CPP11 || defined USE_CPP14
-    return remove_dir(dir);
+    return remove_all(dir);
 #else
     return std::filesystem::remove_all(dir.data());
 #endif

@@ -160,7 +160,7 @@ TEST(FileOptTest, dir)
 
         base::sleep(2000);
 
-        ret = log::file::removeDir("./test");
+        ret = log::file::removeDir("./test/");
         EXPECT_EQ(ret, true);
 
         ret = log::file::exists("./test/test/9.txt");
