@@ -60,10 +60,14 @@ include_directories(${MAIN_PATH}/include)
 include_directories(${MAIN_PATH}/src)
 include_directories(${DEPENDS_PATH}/halcyon/base/1.0.3)
 include_directories(${DEPENDS_PATH}/thirdparty/googletest/1.11.0/include)
+include_directories(${DEPENDS_PATH}/thirdparty/lz4/1.9.4/include)
+include_directories(${DEPENDS_PATH}/thirdparty/zstd/1.5.5/include)
 
 # LINK_DIRECTORIES(${MAIN_PATH}/lib/linux)
 LINK_DIRECTORIES(${LOG_LIB_PATH})
 LINK_DIRECTORIES(${DEPENDS_PATH}/thirdparty/googletest/1.11.0/lib/linux)
+LINK_DIRECTORIES(${DEPENDS_PATH}/thirdparty/lz4/1.9.4/lib/linux)
+LINK_DIRECTORIES(${DEPENDS_PATH}/thirdparty/zstd/1.5.5/lib/linux)
 
 # file_opt
 add_executable(ut_file_opt ${SRC_PATH}/ut_file_opt.cpp ${MAIN_PATH}/src/file_opt.cpp)
