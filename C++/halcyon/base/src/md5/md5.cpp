@@ -154,7 +154,7 @@ void MD5::update(std::ifstream& in)
 
 void MD5::update(const uint8_t* input, size_t length)
 {
-    uint32_t i, index, partLen;
+    uint32_t i, index, part_len;
 
     finished_ = false;
 
@@ -167,14 +167,14 @@ void MD5::update(const uint8_t* input, size_t length)
     }
     count_[1] += ((uint32_t)length >> 29);
 
-    partLen = 64 - index;
+    part_len = 64 - index;
 
     /* transform as many times as possible. */
-    if (length >= partLen) {
-        memcpy(&buffer_[index], input, partLen);
+    if (length >= part_len) {
+        memcpy(&buffer_[index], input, part_len);
         transform(buffer_);
 
-        for (i = partLen; i + 63 < length; i += 64) {
+        for (i = part_len; i + 63 < length; i += 64) {
             transform(&input[i]);
         }
         index = 0;
@@ -189,21 +189,21 @@ void MD5::update(const uint8_t* input, size_t length)
 void MD5::finish()
 {
     uint8_t bits[8];
-    uint32_t oldState[4];
-    uint32_t oldCount[2];
-    uint32_t index, padLen;
+    uint32_t old_state[4];
+    uint32_t old_count[2];
+    uint32_t index, pad_len;
 
     /* Save current state and count. */
-    memcpy(oldState, state_, 16);
-    memcpy(oldCount, count_, 8);
+    memcpy(old_state, state_, 16);
+    memcpy(old_count, count_, 8);
 
     /* Save number of bits */
     encode(count_, bits, 8);
 
     /* Pad out to 56 mod 64. */
     index = (uint32_t)((count_[0] >> 3) & 0x3f);
-    padLen = (index < 56) ? (56 - index) : (120 - index);
-    update(kPadding, padLen);
+    pad_len = (index < 56) ? (56 - index) : (120 - index);
+    update(kPadding, pad_len);
 
     /* Append length (before padding) */
     update(bits, 8);
@@ -212,8 +212,8 @@ void MD5::finish()
     encode(state_, digest_, 16);
 
     /* Restore current state and count. */
-    memcpy(state_, oldState, 16);
-    memcpy(count_, oldCount, 8);
+    memcpy(state_, old_state, 16);
+    memcpy(count_, old_count, 8);
 }
 
 void MD5::transform(const uint8_t block[64])

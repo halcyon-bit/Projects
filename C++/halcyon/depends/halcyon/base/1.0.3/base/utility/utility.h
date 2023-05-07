@@ -18,11 +18,11 @@ namespace std
 {
     // C++14
     template<typename T, typename Other = T>
-    inline T exchange(T& val, Other&& newVal)
+    inline T exchange(T& val, Other&& new_val)
     {
-        T oldVal = ::std::move(val);
-        val = ::std::forward<Other>(newVal);
-        return oldVal;
+        T old_val = ::std::move(val);
+        val = ::std::forward<Other>(new_val);
+        return old_val;
     }
 }
 #endif  // USE_CPP11
@@ -261,7 +261,7 @@ BASE_END_NAMESPACE
 BASE_BEGIN_NAMESPACE
 
 template<typename T>
-std::string type_name()
+std::string typeName()
 {
     using type = typename std::remove_reference<T>::type;
     std::unique_ptr<char, void(*)(void*)> own(nullptr, std::free);
