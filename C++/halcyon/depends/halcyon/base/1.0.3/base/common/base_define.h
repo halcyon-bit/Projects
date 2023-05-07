@@ -41,8 +41,7 @@
 
 // use invoke in halcyon::base replace std::invoke (c++17)
 // use apply in halcyon::base replace std::apply (c++17)
-// #define USE_HALCYON_INVOKE
-// #define USE_HALCYON_APPLY
+// #define USE_HALCYON_INVOKE_APPLY
 
 #if defined USE_CPP11 || defined USE_CPP14
 #define USE_HALCYON_STRING_VIEW

@@ -93,9 +93,9 @@ public:
 
 TEST(UtilityTest, type_name_)
 {
-    std::cout << base::type_name<double>() << std::endl;
-    std::cout << base::type_name<std::string>() << std::endl;
-    std::cout << base::type_name<std::map<int, int>>() << std::endl;
+    std::cout << base::typeName<double>() << std::endl;
+    std::cout << base::typeName<std::string>() << std::endl;
+    std::cout << base::typeName<std::map<int, int>>() << std::endl;
 }
 
 TEST(UtilityTest, invoke_)

@@ -89,7 +89,7 @@ inline std::string toString(const Timestamp& time)
  * @param[in]   是否显示微妙
  * @return      "20200108 14:58:40.000258"
  */
-inline std::string toFormatString(const Timestamp& time, bool showMicroseconds = true)
+inline std::string toFormatString(const Timestamp& time, bool show_microseconds = true)
 {
     int64_t micros = microSecondsSinceEpoch(time);
     int64_t seconds = static_cast<time_t>(micros / kMicroSecondsPerSecond);
@@ -102,7 +102,7 @@ inline std::string toFormatString(const Timestamp& time, bool showMicroseconds =
 #endif
 
     char buf[64] = { 0 };
-    if (showMicroseconds) {
+    if (show_microseconds) {
         int32_t microseconds = static_cast<int32_t>(micros % kMicroSecondsPerSecond);
         snprintf(buf, sizeof(buf), "%4d%02d%02d %02d:%02d:%02d.%06d",
             tm_time.tm_year + 1900, tm_time.tm_mon + 1, tm_time.tm_mday,

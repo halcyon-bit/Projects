@@ -61,21 +61,23 @@ public:  /// 通知相关接口(异步)，注意：通知一般是一对多的
      * @param[in]   通知key
      * @param[in]   函数指针
      * @param[in]   调用通知函数的线程，若无，则使用 MessageBus 中的线程
-     * @ps          调用者确保 genFunc != nullptr
+     * @ps          调用者确保 gen_func != nullptr
      */
     template<typename R, typename... Args>
-    void attachNotify(const MessageKey& msgKey, R(*genFunc)(Args...), ThreadSPtr thd = nullptr)
+    void attachNotify(const MessageKey& msg_key, R(*gen_func)(Args...), ThreadSPtr thd = nullptr)
     {
         using notify_func_t = std::function<void(Args...)>;
-        assert(genFunc != nullptr);
+        assert(gen_func != nullptr);
         // 通知函数
-        auto func = notify_func_t([genFunc](Args... args) {
-            genFunc(std::forward<Args>(args)...);
+        auto func = notify_func_t([gen_func](Args... args) {
+            gen_func(std::forward<Args>(args)...);
         });
 
-        uintptr_t id = reinterpret_cast<uintptr_t>(genFunc);
-        NotifyValue value{ func, id, thd == nullptr ? thd_ : thd };
-        addNotify(msgKey, std::move(value));
+        uintptr_t id = reinterpret_cast<uintptr_t>(gen_func);
+        NotifyValue value;
+        value.func = func; value.identity = id;
+        value.thd = (thd == nullptr ? thd_ : thd);
+        addNotify(msg_key, std::move(value));
     }
 
     /**
@@ -84,84 +86,88 @@ public:  /// 通知相关接口(异步)，注意：通知一般是一对多的
      * @param[in]   对象指针
      * @param[in]   函数指针
      * @param[in]   调用通知函数的线程，若无，则使用 MessageBus 中的线程
-     * @ps          调用者确保 memFunc != nullptr && obj != nullptr
+     * @ps          调用者确保 mem_func != nullptr && obj != nullptr
      */
     template<typename C, typename R, typename... Args>
-    void attachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...), ThreadSPtr thd = nullptr)
+    void attachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...), ThreadSPtr thd = nullptr)
     {
         using notify_func_t = std::function<void(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
+        assert(mem_func != nullptr && obj != nullptr);
         // 通知函数
-        auto func = notify_func_t([obj, memFunc](Args... args) {
-            (obj->*memFunc)(std::forward<Args>(args)...);
+        auto func = notify_func_t([obj, mem_func](Args... args) {
+            (obj->*mem_func)(std::forward<Args>(args)...);
         });
 
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
-        uintptr_t id = _atoi64(buf);
-        NotifyValue value = { func, id, thd == nullptr ? thd_ : thd };
-        addNotify(msgKey, std::move(value));
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
+        NotifyValue value;
+        value.func = func; value.identity = _atoi64(buf);
+        value.thd = (thd == nullptr ? thd_ : thd);
+        addNotify(msg_key, std::move(value));
     }
     template<typename C, typename R, typename... Args>
-    void attachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) const, ThreadSPtr thd = nullptr)
+    void attachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) const, ThreadSPtr thd = nullptr)
     {
         using notify_func_t = std::function<void(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
+        assert(mem_func != nullptr && obj != nullptr);
         // 通知函数
-        auto func = notify_func_t([obj, memFunc](Args... args) {
-            (obj->*memFunc)(std::forward<Args>(args)...);
+        auto func = notify_func_t([obj, mem_func](Args... args) {
+            (obj->*mem_func)(std::forward<Args>(args)...);
         });
 
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
-        uintptr_t id = _atoi64(buf);
-        NotifyValue value = { func, id, thd == nullptr ? thd_ : thd };
-        addNotify(msgKey, std::move(value));
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
+        NotifyValue value;
+        value.func = func; value.identity = _atoi64(buf);
+        value.thd = (thd == nullptr ? thd_ : thd);
+        addNotify(msg_key, std::move(value));
     }
     template<typename C, typename R, typename... Args>
-    void attachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) volatile, ThreadSPtr thd = nullptr)
+    void attachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) volatile, ThreadSPtr thd = nullptr)
     {
         using notify_func_t = std::function<void(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
+        assert(mem_func != nullptr && obj != nullptr);
         // 通知函数
-        auto func = notify_func_t([obj, memFunc](Args... args) {
-            (obj->*memFunc)(std::forward<Args>(args)...);
+        auto func = notify_func_t([obj, mem_func](Args... args) {
+            (obj->*mem_func)(std::forward<Args>(args)...);
         });
 
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
-        uintptr_t id = _atoi64(buf);
-        NotifyValue value = { func, id, thd == nullptr ? thd_ : thd };
-        addNotify(msgKey, std::move(value));
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
+        NotifyValue value;
+        value.func = func; value.identity = _atoi64(buf);
+        value.thd = (thd == nullptr ? thd_ : thd);
+        addNotify(msg_key, std::move(value));
     }
     template<typename C, typename R, typename... Args>
-    void attachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) const volatile, ThreadSPtr thd = nullptr)
+    void attachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) const volatile, ThreadSPtr thd = nullptr)
     {
         using notify_func_t = std::function<void(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
+        assert(mem_func != nullptr && obj != nullptr);
         // 通知函数
-        auto func = notify_func_t([obj, memFunc](Args... args) {
-            (obj->*memFunc)(std::forward<Args>(args)...);
+        auto func = notify_func_t([obj, mem_func](Args... args) {
+            (obj->*mem_func)(std::forward<Args>(args)...);
         });
 
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
-        uintptr_t id = _atoi64(buf);
-        NotifyValue value = { func, id, thd == nullptr ? thd_ : thd };
-        addNotify(msgKey, std::move(value));
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
+        NotifyValue value;
+        value.func = func; value.identity = _atoi64(buf);
+        value.thd = (thd == nullptr ? thd_ : thd);
+        addNotify(msg_key, std::move(value));
     }
 
     /**
      * @brief       反注册通知(普通函数)
      * @param[in]   通知key
      * @param[in]   函数指针
-     * @ps          调用者确保 genFunc != nullptr
+     * @ps          调用者确保 gen_func != nullptr
      */
     template<typename R, typename... Args>
-    void detachNotify(const MessageKey& msgKey, R(*genFunc)(Args...))
+    void detachNotify(const MessageKey& msg_key, R(*gen_func)(Args...))
     {
-        uintptr_t identity = reinterpret_cast<uintptr_t>(genFunc);
-        delNotify(msgKey, identity);
+        uintptr_t identity = reinterpret_cast<uintptr_t>(gen_func);
+        delNotify(msg_key, identity);
     }
 
     /**
@@ -169,49 +175,49 @@ public:  /// 通知相关接口(异步)，注意：通知一般是一对多的
      * @param[in]   通知key
      * @param[in]   对象指针
      * @param[in]   函数指针
-     * @ps          调用者确保 memFunc != nullptr && obj != nullptr
+     * @ps          调用者确保 mem_func != nullptr && obj != nullptr
      */
     template<typename C, typename R, typename... Args>
-    void detachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...))
+    void detachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...))
     {
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
         uintptr_t identity = _atoi64(buf);
-        delNotify(msgKey, identity);
+        delNotify(msg_key, identity);
     }
     template<typename C, typename R, typename... Args>
-    void detachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) const)
+    void detachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) const)
     {
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
         uintptr_t identity = _atoi64(buf);
-        delNotify(msgKey, identity);
+        delNotify(msg_key, identity);
     }
     template<typename C, typename R, typename... Args>
-    void detachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) volatile)
+    void detachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) volatile)
     {
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
         uintptr_t identity = _atoi64(buf);
-        delNotify(msgKey, identity);
+        delNotify(msg_key, identity);
     }
     template<typename C, typename R, typename... Args>
-    void detachNotify(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) const volatile)
+    void detachNotify(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) const volatile)
     {
         char buf[64]{ 0 };
-        snprintf(buf, sizeof(buf), "%llu", memFunc);
+        snprintf(buf, sizeof(buf), "%llu", mem_func);
         uintptr_t identity = _atoi64(buf);
-        delNotify(msgKey, identity);
+        delNotify(msg_key, identity);
     }
 
     /**
      * @brief       反注册某个通知（清除该通知下的所有函数）
      * @param[in]   通知key
      */
-    void detachNotify(const MessageKey& msgKey)
+    void detachNotify(const MessageKey& msg_key)
     {
         std::lock_guard<std::mutex> lock(notify_mutex_);
-        auto range = notify_.equal_range(msgKey);
+        auto range = notify_.equal_range(msg_key);
         notify_.erase(range.first, range.second);
     }
 
@@ -221,11 +227,11 @@ public:  /// 通知相关接口(异步)，注意：通知一般是一对多的
      * @param[in]   消息所需参数
      */
     template<typename... Args>
-    void notify(const MessageKey& msgKey, Args... args)
+    void notify(const MessageKey& msg_key, Args... args)
     {
         using notify_func_t = std::function<void(Args...)>;
         std::lock_guard<std::mutex> lock(notify_mutex_);
-        auto range = notify_.equal_range(msgKey);
+        auto range = notify_.equal_range(msg_key);
         for (auto iter = range.first; iter != range.second; ++iter) {
             NotifyValue& value = iter->second;
             auto thd = value.thd.lock();
@@ -234,7 +240,10 @@ public:  /// 通知相关接口(异步)，注意：通知一般是一对多的
                 continue;
             }
 #ifdef USE_HALCYON_ANY
-            auto func = value.func.anyCast<notify_func_t>();
+            // 使用 gcc 编译有问题?
+            // auto func = value.func.anyCast<notify_func_t>();
+            Any& any = value.func;
+            auto func = any.anyCast<notify_func_t>();
 #else
             auto func = std::any_cast<notify_func_t>(value.func);
 #endif
@@ -256,19 +265,19 @@ public:  /// 事务相关调用(同步)，注意：事务是一对一的
      * @brief       注册事务(普通函数)
      * @param[in]   事务key
      * @param[in]   函数指针
-     * @ps          调用者确保 genFunc != nullptr
+     * @ps          调用者确保 gen_func != nullptr
      */
     template<typename R, typename... Args>
-    void attach(const MessageKey& msgKey, R(*genFunc)(Args...))
+    void attach(const MessageKey& msg_key, R(*gen_func)(Args...))
     {
         using affair_func_t = std::function<R(Args...)>;
-        assert(genFunc != nullptr);
-        auto func = affair_func_t([genFunc](Args... args) -> R {
-            return genFunc(std::forward<Args>(args)...);
+        assert(gen_func != nullptr);
+        auto func = affair_func_t([gen_func](Args... args) -> R {
+            return gen_func(std::forward<Args>(args)...);
         });
         {
             std::lock_guard<std::mutex> lock(affair_mutex_);
-            affair_[msgKey] = func;
+            affair_[msg_key] = func;
         }
     }
 
@@ -277,58 +286,58 @@ public:  /// 事务相关调用(同步)，注意：事务是一对一的
      * @param[in]   事务key
      * @param[in]   对象指针
      * @param[in]   函数指针
-     * @ps          调用者确保 memFunc != nullptr && obj != nullptr
+     * @ps          调用者确保 mem_func != nullptr && obj != nullptr
      */
     template<typename C, typename R, typename... Args>
-    void attach(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...))
+    void attach(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...))
     {
         using affair_func_t = std::function<R(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
-        auto func = affair_func_t([obj, memFunc](Args... args) -> R {
-            return (obj->*memFunc)(std::forward<Args>(args)...);
+        assert(mem_func != nullptr && obj != nullptr);
+        auto func = affair_func_t([obj, mem_func](Args... args) -> R {
+            return (obj->*mem_func)(std::forward<Args>(args)...);
         });
         {
             std::lock_guard<std::mutex> lock(affair_mutex_);
-            affair_[msgKey] = func;
+            affair_[msg_key] = func;
         }
     }
     template<typename C, typename R, typename... Args>
-    void attach(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) const)
+    void attach(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) const)
     {
         using affair_func_t = std::function<R(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
-        auto func = affair_func_t([obj, memFunc](Args... args) -> R {
-            return (obj->*memFunc)(std::forward<Args>(args)...);
+        assert(mem_func != nullptr && obj != nullptr);
+        auto func = affair_func_t([obj, mem_func](Args... args) -> R {
+            return (obj->*mem_func)(std::forward<Args>(args)...);
         });
         {
             std::lock_guard<std::mutex> lock(affair_mutex_);
-            affair_[msgKey] = func;
+            affair_[msg_key] = func;
         }
     }
     template<typename C, typename R, typename... Args>
-    void attach(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) volatile)
+    void attach(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) volatile)
     {
         using affair_func_t = std::function<R(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
-        auto func = affair_func_t([obj, memFunc](Args... args) -> R {
-            return (obj->*memFunc)(std::forward<Args>(args)...);
+        assert(mem_func != nullptr && obj != nullptr);
+        auto func = affair_func_t([obj, mem_func](Args... args) -> R {
+            return (obj->*mem_func)(std::forward<Args>(args)...);
         });
         {
             std::lock_guard<std::mutex> lock(affair_mutex_);
-            affair_[msgKey] = func;
+            affair_[msg_key] = func;
         }
     }
     template<typename C, typename R, typename... Args>
-    void attach(const MessageKey& msgKey, C* obj, R(C::*memFunc)(Args...) const volatile)
+    void attach(const MessageKey& msg_key, C* obj, R(C::*mem_func)(Args...) const volatile)
     {
         using affair_func_t = std::function<R(Args...)>;
-        assert(memFunc != nullptr && obj != nullptr);
-        auto func = affair_func_t([obj, memFunc](Args... args) -> R {
-            return (obj->*memFunc)(std::forward<Args>(args)...);
+        assert(mem_func != nullptr && obj != nullptr);
+        auto func = affair_func_t([obj, mem_func](Args... args) -> R {
+            return (obj->*mem_func)(std::forward<Args>(args)...);
         });
         {
             std::lock_guard<std::mutex> lock(affair_mutex_);
-            affair_[msgKey] = func;
+            affair_[msg_key] = func;
         }
     }
 
@@ -336,10 +345,10 @@ public:  /// 事务相关调用(同步)，注意：事务是一对一的
      * @brief       反注册某个事务
      * @param[in]   通知key
      */
-    void detach(const MessageKey& msgKey)
+    void detach(const MessageKey& msg_key)
     {
         std::lock_guard<std::mutex> lock(affair_mutex_);
-        affair_.erase(msgKey);
+        affair_.erase(msg_key);
     }
 
     /**
@@ -347,20 +356,20 @@ public:  /// 事务相关调用(同步)，注意：事务是一对一的
      * @param[in]   事务key
      * @param[in]   参数
      * @return      调用结果
-     * @ps          调用者确保 msgKey 已经 attach
+     * @ps          调用者确保 msg_key 已经 attach
      */
     template<typename R, typename... Args>
-    R runSync(const MessageKey& msgKey, Args... args)
+    R runSync(const MessageKey& msg_key, Args... args)
     {
         using affair_func_t = std::function<R(Args...)>;
         affair_func_t func;
         {
             std::lock_guard<std::mutex> lock(affair_mutex_);
-            auto iter = affair_.find(msgKey);
+            auto iter = affair_.find(msg_key);
             assert(iter != affair_.end());
 #ifdef USE_HALCYON_ANY
             // 使用 gcc 编译有问题?
-            // func = iter->second.anyCast<function_type>();
+            // func = iter->second.anyCast<affair_func_t>();
             Any& any = iter->second;
             func = any.anyCast<affair_func_t>();
 #else

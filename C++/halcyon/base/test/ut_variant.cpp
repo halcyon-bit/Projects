@@ -45,6 +45,7 @@ public:
     TestMove& operator=(const TestMove& rhs)
     {
         data_ = new char[100];
+        return *this;
     }
 
     TestMove(TestMove&& rhs) noexcept
