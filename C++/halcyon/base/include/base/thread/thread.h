@@ -2,7 +2,7 @@
 #define BASE_THREAD_H
 
 #include <base/thread/thread_task.h>
-#include <base/thread/blocking_queue.h>
+#include <base/queue/blocking_queue.h>
 
 #include <thread>
 #include <atomic>
@@ -67,7 +67,7 @@ public:
             [task]() { (*task)(); },
             task->get_future());
 
-        queue_.put(result);
+        queue_.push(result);
         return result;
     }
 
@@ -97,7 +97,7 @@ public:
     {
         bool expected = true;
         if (started_.compare_exchange_strong(expected, false)) {
-            queue_.put(nullptr);
+            queue_.push(nullptr);
             thd_.join();
         }
     }

@@ -1,4 +1,4 @@
-﻿#include "base/thread/blocking_queue.h"
+﻿#include "base/queue/blocking_queue.h"
 #include "base/thread/count_down_latch.h"
 
 #include <vector>
@@ -25,7 +25,7 @@ public:
         for (int32_t i = 0; i < times; ++i) {
             std::stringstream ss;
             ss << "hello " << i;
-            queue_.put(std::move(ss.str()));
+            queue_.push(std::move(ss.str()));
         }
     }
 
@@ -33,8 +33,8 @@ public:
     {
         size_t size = threads_.size();
         for (size_t i = 0; i < size; ++i) {
-            // 因 BlockingQueue 暂未支持多线程退出，所以 put "stop" 多次(线程数)
-            queue_.put("stop");
+            // 因 BlockingQueue 暂未支持多线程退出，所以 push "stop" 多次(线程数)
+            queue_.push("stop");
         }
 
         for (auto& thd : threads_) {

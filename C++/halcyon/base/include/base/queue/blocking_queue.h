@@ -25,7 +25,7 @@ public:
      * @brief       入队
      * @param[in]   数据
      */
-    void put(const T& x)
+    void push(const T& x)
     {
         {
             std::lock_guard<std::mutex> lock(mutex_);
@@ -33,11 +33,11 @@ public:
         }
         cv_.notify_one();
     }
-    void put(T&& x)
+    void push(T&& x)
     {
         {
             std::lock_guard<std::mutex> lock(mutex_);
-            queue_.push_back(std::move(x));
+            queue_.push_back(std::forward<T>(x));
         }
         cv_.notify_one();
     }
@@ -55,7 +55,7 @@ public:
         assert(!queue_.empty());
         T front(std::move(queue_.front()));
         queue_.pop_front();
-        return std::move(front);
+        return front;
     }
 
     /**
@@ -94,6 +94,15 @@ public:
     {
         std::lock_guard<std::mutex> lock(mutex_);
         return queue_.clear();
+    }
+
+    /**
+     * @brief   队列是否为空
+     */
+    bool empty() const
+    {
+        std::lock_guard<std::mutex> lock(mutex_);
+        return queue_.empty();
     }
 
 private:
